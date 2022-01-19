@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "862234343810",
+    "project_id": "location-tracker-signin",
+    "storage_bucket": "location-tracker-signin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862234343810:android:575dab01f9e751b6c2779b",
+        "android_client_info": {
+          "package_name": "com.example.location_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862234343810-21v704520kl5b2v16p1p1nd9k7ep0ohu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEF55wHpyKAvRm10ZGPi3cZOceEsPVVg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862234343810-21v704520kl5b2v16p1p1nd9k7ep0ohu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
