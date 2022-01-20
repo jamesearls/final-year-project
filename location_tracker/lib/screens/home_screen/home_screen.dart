@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Fluttertoast.showToast(msg: 'User denied the permission forever');
     }
     Position currentposition = await Geolocator.getCurrentPosition();
+
     setState(() {
       position = currentposition;
       latitude = currentposition.latitude;
@@ -83,6 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
                 onPressed: () {
                   getLocation();
+                  print("button pushed lmao");
+                  print(LocalUtils.getLat());
+                  print(LocalUtils.getLong());
                 },
                 child: const Text('Get Location'))
           ],
