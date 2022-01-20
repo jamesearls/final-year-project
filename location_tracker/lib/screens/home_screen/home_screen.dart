@@ -1,5 +1,9 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location_tracker/utils/local_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   // This widget is the home page of your application. It is stateful, meaning
@@ -16,28 +20,45 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var locationMessage = '';
-  String latitude = '';
-  String longitude = '';
+  Position? position;
+  var latitude;
+  var longitude;
 
-  void getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    var position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    var lat = position.latitude;
-    var long = position.longitude;
+  getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-    latitude = "$lat";
-    longitude = "$long";
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
+    if (!serviceEnabled) {
+      Fluttertoast.showToast(msg: 'Location Service is disabled');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Fluttertoast.showToast(msg: 'User denied the permission');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      Fluttertoast.showToast(msg: 'User denied the permission forever');
+    }
+    Position currentposition = await Geolocator.getCurrentPosition();
     setState(() {
-      locationMessage = "Latitude $lat and Longitude $long";
+      position = currentposition;
+      latitude = currentposition.latitude;
+      longitude = currentposition.longitude;
     });
   }
 
   @override
+  void initState() {
+    getLocation();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    getCurrentLocation();
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -57,13 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("LAT: $latitude, LNG: $longitude"),
-            FlatButton(
-              child: const Text("Get location"),
-              onPressed: () {
-                getCurrentLocation();
-              },
-            ),
+            Text(position == null ? 'Location:' : position.toString(),
+                style: const TextStyle(fontSize: 20)),
+            ElevatedButton(
+                onPressed: () {
+                  getLocation();
+                },
+                child: const Text('Get Location'))
           ],
         ),
       ),
