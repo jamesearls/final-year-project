@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:location_tracker/utils/local_utils.dart';
+import 'package:location_tracker/screens/map_screen/map_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -20,44 +20,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Position? position;
-  var latitude;
-  var longitude;
-
-  getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      Fluttertoast.showToast(msg: 'Location Service is disabled');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Fluttertoast.showToast(msg: 'User denied the permission');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      Fluttertoast.showToast(msg: 'User denied the permission forever');
-    }
-    Position currentposition = await Geolocator.getCurrentPosition();
-
-    setState(() {
-      position = currentposition;
-      latitude = currentposition.latitude;
-      longitude = currentposition.longitude;
-    });
-  }
-
-  @override
-  void initState() {
-    getLocation();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -75,22 +37,30 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: (Colors.white)),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(position == null ? 'Location:' : position.toString(),
-                style: const TextStyle(fontSize: 20)),
-            ElevatedButton(
-                onPressed: () {
-                  getLocation();
-                  print("button pushed lmao");
-                  print(LocalUtils.getLat());
-                  print(LocalUtils.getLong());
-                },
-                child: const Text('Get Location'))
-          ],
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'James is using google maps in flutter',
+                style: TextStyle(fontSize: 42),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'The google_maps_flutter package is still in the Developers Preview status, so make sure you monitor changes closely when using it. There will likely be breaking changes in the near future.',
+                style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Increment',
+        child: const Icon(Icons.map),
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MapScreen())),
       ),
     );
   }
