@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:location_tracker/models/user_location.dart';
 import 'package:location_tracker/screens/home_screen/home_screen.dart';
-import 'package:location_tracker/screens/map_screen/map_screen.dart';
+import 'package:location_tracker/screens/login_screen/login_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'services/location_service.dart';
@@ -29,7 +29,7 @@ class App extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.deepPurple,
         ),
-        home: const HomeScreen(),
+        home: LoginScreen(),
       ),
     );
   }
