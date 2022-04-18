@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location_tracker/screens/login_screen/login_screen.dart';
 import 'package:location_tracker/screens/profile_screen/profile_screen.dart';
+import 'package:location_tracker/services/auth.dart';
 import 'package:location_tracker/shared/bottom_nav.dart';
 
 class IndexScreen extends StatefulWidget {
@@ -48,13 +49,9 @@ class _IndexScreenState extends State<IndexScreen> {
               // ),
               ElevatedButton(
                   onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ),
-                    );
+                    await AuthService().signOut();
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/', (route) => false);
                   },
                   child: const Text('Sign out'))
               // and, signing out the user
