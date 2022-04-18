@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:location_tracker/screens/home_screen/home_screen.dart';
-import 'package:location_tracker/screens/profile_screen.dart';
+import 'package:location_tracker/screens/index_screen/index_screen.dart';
 import 'package:location_tracker/screens/register_screen/register_screen.dart';
 import 'package:location_tracker/utils/fire_auth.dart';
 import 'package:location_tracker/utils/validator.dart';
@@ -65,8 +65,7 @@ class LoginScreen extends StatelessWidget {
                                   if (user != null) {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomeScreen(user: user)),
+                                          builder: (context) => IndexScreen()),
                                     );
                                   }
                                 }
@@ -77,20 +76,20 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => RegisterScreen()),
-                                );
-                              },
-                              child: Text(
-                                'Register',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
+                          // Expanded(
+                          //   child: ElevatedButton(
+                          //     onPressed: () {
+                          //       Navigator.of(context).push(
+                          //         MaterialPageRoute(
+                          //             builder: (context) => RegisterScreen()),
+                          //       );
+                          //     },
+                          //     child: Text(
+                          //       'Register',
+                          //       style: TextStyle(color: Colors.white),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       )
                     ],
