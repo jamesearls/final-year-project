@@ -1,108 +1,77 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:location_tracker/screens/home_screen/home_screen.dart';
-import 'package:location_tracker/screens/index_screen/index_screen.dart';
-import 'package:location_tracker/screens/register_screen/register_screen.dart';
-import 'package:location_tracker/utils/fire_auth.dart';
-import 'package:location_tracker/utils/validator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:location_tracker/services/auth.dart';
 
 class LoginScreen extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-  final _emailTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
-  final _focusEmail = FocusNode();
-  final _focusPassword = FocusNode();
-
-  Future<FirebaseApp> _initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
-    return firebaseApp;
-  }
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firebase Authentication'),
+        title: const Text('Login'),
       ),
-      body: FutureBuilder(
-        future: _initializeFirebase(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              children: [
-                Text('Login'),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: _emailTextController,
-                        focusNode: _focusEmail,
-                        validator: (value) =>
-                            Validator.validateEmail(email: value),
-                      ),
-                      SizedBox(height: 8.0),
-                      TextFormField(
-                        controller: _passwordTextController,
-                        focusNode: _focusPassword,
-                        obscureText: true,
-                        validator: (value) =>
-                            Validator.validatePassword(password: value),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  User? user =
-                                      await FireAuth.signInUsingEmailPassword(
-                                    email: _emailTextController.text,
-                                    password: _passwordTextController.text,
-                                  );
-                                  if (user != null) {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => IndexScreen()),
-                                    );
-                                  }
-                                }
-                              },
-                              child: Text(
-                                'Sign In',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          // Expanded(
-                          //   child: ElevatedButton(
-                          //     onPressed: () {
-                          //       Navigator.of(context).push(
-                          //         MaterialPageRoute(
-                          //             builder: (context) => RegisterScreen()),
-                          //       );
-                          //     },
-                          //     child: Text(
-                          //       'Register',
-                          //       style: TextStyle(color: Colors.white),
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ],
-            );
-          }
+      body: Container(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const FlutterLogo(
+                size: 150,
+              ),
+              Flexible(
+                child: LoginButton(
+                  icon: FontAwesomeIcons.google,
+                  text: 'Sign in Google',
+                  loginMethod: AuthService().googleLogin,
+                  color: Colors.blue,
+                ),
+              ),
+              Flexible(
+                child: LoginButton(
+                  icon: FontAwesomeIcons.userNinja,
+                  text: 'Continue as Guest',
+                  loginMethod: AuthService().anonLogin,
+                  color: Colors.deepPurple,
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+}
 
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+class LoginButton extends StatelessWidget {
+  final Color color;
+  final IconData icon;
+  final String text;
+  final Function loginMethod;
+
+  const LoginButton(
+      {Key? key,
+      required this.text,
+      required this.icon,
+      required this.color,
+      required this.loginMethod})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: ElevatedButton.icon(
+        icon: Icon(
+          icon,
+          color: Colors.white,
+          size: 20,
+        ),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.all(24),
+          backgroundColor: color,
+        ),
+        onPressed: () => loginMethod(),
+        label: Text(text, textAlign: TextAlign.center),
       ),
     );
   }
