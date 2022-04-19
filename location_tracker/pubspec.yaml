@@ -43,6 +43,8 @@ dependencies:
 
   # Database
   cloud_firestore: ^2.5.0
+  json_annotation: ^4.4.0
+
 
   # Google Icon
   font_awesome_flutter: ^9.2.0
@@ -60,10 +62,12 @@ dependencies:
   fluttertoast: ^8.0.8
   location: ^4.3.0
   geofence_service: ^3.4.8
+  rxdart: ^0.27.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -71,6 +75,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+  build_runner: ^2.1.10
+  json_serializable: ^6.1.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
