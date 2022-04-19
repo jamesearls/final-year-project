@@ -6,6 +6,21 @@ class AuthService {
   final userStream = FirebaseAuth.instance.authStateChanges();
   final user = FirebaseAuth.instance.currentUser;
 
+  // getUser
+  String? getUserName() {
+    return user!.displayName;
+  }
+
+  // getUserEmail
+  String? getUserEmail() {
+    return user!.email;
+  }
+
+  // getUserVerified
+  bool getUserVerified() {
+    return user!.emailVerified;
+  }
+
   // Anonymous Firebase login
   Future<void> anonLogin() async {
     try {

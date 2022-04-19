@@ -22,11 +22,11 @@ class _IndexScreenState extends State<IndexScreen> {
     return Scaffold(
       bottomNavigationBar: const BottomNavBar(),
       appBar: AppBar(
-          // title: Text(
-          //   'Welcome ${_currentUser.displayName}',
-          //   style: const TextStyle(color: (Colors.white)),
-          // ),
-          ),
+        title: Text(
+          'Welcome ${AuthService().getUserName()}',
+          style: const TextStyle(color: (Colors.white)),
+        ),
+      ),
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(16),
