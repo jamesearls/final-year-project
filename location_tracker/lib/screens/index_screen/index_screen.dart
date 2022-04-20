@@ -1,64 +1,44 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:location_tracker/screens/login_screen/login_screen.dart';
-import 'package:location_tracker/screens/profile_screen/profile_screen.dart';
-import 'package:location_tracker/services/auth.dart';
+import 'package:location_tracker/models/models.dart';
+import 'package:location_tracker/screens/buildings/buildings.dart';
+import 'package:location_tracker/services/firestore.dart';
 import 'package:location_tracker/shared/bottom_nav.dart';
+import 'package:location_tracker/shared/error.dart';
+import 'package:location_tracker/shared/loading.dart';
 
-class IndexScreen extends StatefulWidget {
+class IndexScreen extends StatelessWidget {
   const IndexScreen({Key? key}) : super(key: key);
-  @override
-  State<IndexScreen> createState() => _IndexScreenState();
-}
-
-class _IndexScreenState extends State<IndexScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: const BottomNavBar(),
-      appBar: AppBar(
-        title: Text(
-          'Welcome ${AuthService().getUserName()}',
-          style: const TextStyle(color: (Colors.white)),
-        ),
-      ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                  "ORG: QUB\nBuilding 1: CSB\nBuilding 2: The Lanyon Building\nBuilding 3: Ashby Building"),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     Navigator.of(context).push(
-              //       MaterialPageRoute(builder: (context) => ProfileScreen()),
-              //     );
-              //   },
-              //   child: const Text(
-              //     'My Profile',
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // ),
-              ElevatedButton(
-                  onPressed: () async {
-                    await AuthService().signOut();
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/', (route) => false);
-                  },
-                  child: const Text('Sign out'))
-              // and, signing out the user
-            ],
-          ),
-        ),
-      ),
+    return FutureBuilder<List<Building>>(
+      future: FirestoreService().getBuildings(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingScreen();
+        } else if (snapshot.hasError) {
+          child:
+          ErrorMessage(message: snapshot.error.toString());
+        } else if (snapshot.hasData) {
+          var buildings = snapshot.data!;
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Index'),
+            ),
+            body: GridView.count(
+              primary: false,
+              padding: const EdgeInsets.all(20.0),
+              crossAxisSpacing: 10,
+              crossAxisCount: 2,
+              children: buildings
+                  .map((building) => BuildingView(building: building))
+                  .toList(),
+            ),
+            bottomNavigationBar: const BottomNavBar(),
+          );
+        } else {}
+        return const Text('No buildings found in Firestore. Check DB');
+      },
     );
   }
 }

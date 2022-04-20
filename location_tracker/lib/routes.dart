@@ -8,10 +8,10 @@ import 'package:location_tracker/screens/index_screen/index_screen.dart';
 
 late final User user;
 var appRoutes = {
-  '/': (context) => HomeScreen(),
-  '/index': (context) => IndexScreen(),
-  '/login': (context) => LoginScreen(),
+  '/': (context) => const HomeScreen(),
+  '/index': (context) => const IndexScreen(),
+  '/login': (context) => const LoginScreen(),
   // '/register': (context) => RegisterScreen(),
-  // '/profile': (context) => ProfileScreen(),
+  '/profile': (context) => const ProfileScreen(),
   '/map': (context) => MapScreen(),
 };

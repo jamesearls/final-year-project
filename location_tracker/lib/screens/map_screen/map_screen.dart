@@ -82,7 +82,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _setMarkerIcon() async {
     _markerIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), 'assets/uni_icon.png');
+        const ImageConfiguration(), 'assets/icons/uni_icon.png');
   }
 
   void _setCircles() {
