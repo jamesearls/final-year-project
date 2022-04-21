@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geofence_service/geofence_service.dart';
 import 'package:location_tracker/models/user_location.dart';
 import 'package:provider/provider.dart';
-import 'package:geofence_service/geofence_service.dart';
+
+double lat = 0.0;
+double lng = 0.0;
 
 class MapScreen extends StatefulWidget {
   @override
@@ -12,6 +15,26 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  Completer<GoogleMapController> _controller = Completer();
+
+  @override
+  void initState() {
+    super.initState();
+    _setMarkerIcon();
+    _setCircles();
+
+    //Geofencing initstate
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _geofenceService
+          .addGeofenceStatusChangeListener(_onGeofenceStatusChanged);
+      // _geofenceService.addLocationChangeListener(_onLocationChanged);
+      _geofenceService.addLocationServicesStatusChangeListener(
+          _onLocationServicesStatusChanged);
+      _geofenceService.addStreamErrorListener(_onError);
+      _geofenceService.start(_geofenceList).catchError(_onError);
+    });
+  }
+
   // Geofensing service
   final _geofenceStreamController = StreamController<Geofence>();
 
@@ -61,24 +84,6 @@ class _MapScreenState extends State<MapScreen> {
 
   String _currentLocationMessage =
       "Geofencing service not started, please walk into range of your organisation";
-
-  @override
-  void initState() {
-    super.initState();
-    _setMarkerIcon();
-    _setCircles();
-
-    //Geofencing initstate
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _geofenceService
-          .addGeofenceStatusChangeListener(_onGeofenceStatusChanged);
-      // _geofenceService.addLocationChangeListener(_onLocationChanged);
-      _geofenceService.addLocationServicesStatusChangeListener(
-          _onLocationServicesStatusChanged);
-      _geofenceService.addStreamErrorListener(_onError);
-      _geofenceService.start(_geofenceList).catchError(_onError);
-    });
-  }
 
   void _setMarkerIcon() async {
     _markerIcon = await BitmapDescriptor.fromAssetImage(
@@ -188,6 +193,9 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     var userLocation = Provider.of<UserLocation?>(context);
+    lat = userLocation?.lat ?? 0.0;
+    lng = userLocation?.lng ?? 0.0;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Map'),
@@ -195,24 +203,37 @@ class _MapScreenState extends State<MapScreen> {
         body: Stack(
           children: <Widget>[
             GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                  target:
-                      LatLng(userLocation!.latitude, userLocation.longitude),
-                  zoom: 16),
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(lat, lng), zoom: 16),
               markers: _markers,
               circles: _circles,
               myLocationButtonEnabled: true,
               zoomControlsEnabled: false,
               myLocationEnabled: true,
+              scrollGesturesEnabled: false,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
             ),
             Container(
               alignment: Alignment.bottomCenter,
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 32),
-              child: Text(_currentLocationMessage),
+              child: Text(
+                _currentLocationMessage,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+              ),
             )
           ],
         ));
+  }
+
+  Future<void> centerScreen(double lat, double lng) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(lat, lng), zoom: 16.0)));
   }
 
   @override
