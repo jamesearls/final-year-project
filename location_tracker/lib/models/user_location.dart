@@ -1,6 +1,6 @@
 class UserLocation {
-  double latitude;
-  double longitude;
+  double lat;
+  double lng;
 
-  UserLocation({required this.latitude, required this.longitude});
+  UserLocation({required this.lat, required this.lng});
 }

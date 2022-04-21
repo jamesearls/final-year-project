@@ -16,8 +16,8 @@ class LocationService {
       if (granted == PermissionStatus.granted) {
         location.onLocationChanged.listen((locationData) {
           _locationController.add(UserLocation(
-            latitude: locationData.latitude!,
-            longitude: locationData.longitude!,
+            lat: locationData.latitude!,
+            lng: locationData.longitude!,
           ));
         });
       }
@@ -30,8 +30,8 @@ class LocationService {
     try {
       var userLocation = await location.getLocation();
       _currentLocation = UserLocation(
-        latitude: userLocation.latitude!,
-        longitude: userLocation.longitude!,
+        lat: userLocation.latitude!,
+        lng: userLocation.longitude!,
       );
     } catch (e) {
       print('Could not get the location: $e');
