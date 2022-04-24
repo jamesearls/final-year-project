@@ -43,6 +43,8 @@ class BottomNavBar extends StatelessWidget {
           case 1:
             Building currentBuilding =
                 await firestoreService.getCurrentBuilding();
+
+            // If in building, show that screen, if not popup to say not in building
             if (currentBuilding.id == "") {
               showDialog<String>(
                 context: context,
@@ -65,7 +67,6 @@ class BottomNavBar extends StatelessWidget {
                       BuildingScreen(building: currentBuilding)));
               break;
             }
-          // If in building, show that screen, if not popup to say not in building
           case 2:
             Navigator.pushNamed(context, '/map');
             break;
