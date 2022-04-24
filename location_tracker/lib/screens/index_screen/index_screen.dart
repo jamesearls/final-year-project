@@ -60,7 +60,7 @@ class _IndexScreenState extends State<IndexScreen> {
                 FloatingActionButton(
                   onPressed: () {
                     // Add your onPressed code here!
-                    nfcService.tagReader();
+                    nfcService.getPayload();
                   },
                   backgroundColor: Colors.green,
                   child: const Icon(Icons.navigation),
