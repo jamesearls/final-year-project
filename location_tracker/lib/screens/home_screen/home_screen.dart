@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:location_tracker/screens/index_screen/index_screen.dart';
 import 'package:location_tracker/screens/login_screen/login_screen.dart';
 import 'package:location_tracker/services/auth.dart';
+import 'package:location_tracker/services/firestore.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
+  FirestoreService firestoreService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +23,7 @@ class HomeScreen extends StatelessWidget {
             child: Text('Error: ${snapshot.error}'),
           );
         } else if (snapshot.hasData) {
+          firestoreService.userSetup();
           return const IndexScreen();
         } else {
           return const LoginScreen();

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:location_tracker/models/models.dart';
+import 'package:location_tracker/screens/buildings/buildings.dart';
+import 'package:location_tracker/services/firestore.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
-
+  BottomNavBar({Key? key}) : super(key: key);
+  FirestoreService firestoreService = FirestoreService();
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -12,6 +15,7 @@ class BottomNavBar extends StatelessWidget {
           icon: Icon(
             FontAwesomeIcons.user,
             size: 20,
+            color: Colors.grey,
           ),
           label: 'Profile',
         ),
@@ -30,15 +34,38 @@ class BottomNavBar extends StatelessWidget {
           label: 'Map',
         ),
       ],
-      fixedColor: Colors.deepPurple[200],
-      onTap: (int idx) {
+      fixedColor: Colors.grey[100],
+      onTap: (int idx) async {
         switch (idx) {
           case 0:
             Navigator.pushNamed(context, '/profile');
             break;
           case 1:
-            Navigator.pushNamed(context, '/search');
-            break;
+            Building currentBuilding =
+                await firestoreService.getCurrentBuilding();
+            if (currentBuilding.id == "") {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Not in a building'),
+                  content: const Text(
+                      'Please move into a building in your org to access this screen.\nView the map to find buildings in your org.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Dismiss'),
+                    ),
+                  ],
+                ),
+              );
+              break;
+            } else {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      BuildingScreen(building: currentBuilding)));
+              break;
+            }
+          // If in building, show that screen, if not popup to say not in building
           case 2:
             Navigator.pushNamed(context, '/map');
             break;
