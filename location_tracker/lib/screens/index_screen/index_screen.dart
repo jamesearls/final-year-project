@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/buildings/buildings.dart';
 import 'package:location_tracker/services/firestore.dart';
+import 'package:location_tracker/services/nfcService.dart';
 import 'package:location_tracker/shared/bottom_nav.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
@@ -19,6 +20,7 @@ class IndexScreen extends StatefulWidget {
 }
 
 class _IndexScreenState extends State<IndexScreen> {
+  NfcService nfcService = NfcService();
   @override
   void initState() {
     super.initState();
@@ -55,6 +57,14 @@ class _IndexScreenState extends State<IndexScreen> {
                   ),
                 ),
                 const LocationText(),
+                FloatingActionButton(
+                  onPressed: () {
+                    // Add your onPressed code here!
+                    nfcService.tagReader();
+                  },
+                  backgroundColor: Colors.green,
+                  child: const Icon(Icons.navigation),
+                ),
               ],
             ),
             bottomNavigationBar: BottomNavBar(),
