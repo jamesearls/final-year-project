@@ -70,4 +70,7 @@ class UsersInRooms {
   final String userId;
 
   UsersInRooms({this.roomId = '', this.userId = ''});
+  factory UsersInRooms.fromJson(Map<String, dynamic> json) =>
+      _$UsersInRoomsFromJson(json);
+  Map<String, dynamic> toJson() => _$UsersInRoomsToJson(this);
 }

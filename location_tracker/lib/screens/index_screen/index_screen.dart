@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/buildings/buildings.dart';
 import 'package:location_tracker/services/firestore.dart';
@@ -60,10 +61,24 @@ class _IndexScreenState extends State<IndexScreen> {
                 FloatingActionButton(
                   onPressed: () {
                     // Add your onPressed code here!
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Ready to Scan!'),
+                        content: const Text(
+                            'Please move into a room in your and scan the NFC tag.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Dismiss'),
+                          ),
+                        ],
+                      ),
+                    );
                     nfcService.getPayload();
                   },
-                  backgroundColor: Colors.green,
-                  child: const Icon(Icons.navigation),
+                  backgroundColor: Colors.deepPurple,
+                  child: const Icon(FontAwesomeIcons.nfcSymbol),
                 ),
               ],
             ),

@@ -48,6 +48,14 @@ class FirestoreService {
     return usersInBuildings.toList();
   }
 
+  Future<List> getAllUsersInRooms() async {
+    var ref = _db.collection('usersInRooms');
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var usersInRooms = data.map((d) => UsersInRooms.fromJson(d));
+    return usersInRooms.toList();
+  }
+
   // Method to return number of documents UsersinBuilding with buildingId
   Future<String> getUsersInBuildings(String buildingId) async {
     var ref = _db
@@ -144,6 +152,37 @@ class FirestoreService {
     var snapshots = await collection.get();
     for (var doc in snapshots.docs) {
       await doc.reference.delete();
+    }
+  }
+
+  Future<void> addOrRemoveUserInRooms(String roomId) async {
+    CollectionReference usersInRooms =
+        FirebaseFirestore.instance.collection('usersInRooms');
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    List uib = await getAllUsersInRooms();
+
+    String? uid = auth.currentUser?.uid.toString() ?? "not working";
+    bool recordExists = false;
+
+    for (var i = 0; i < uib.length; i++) {
+      if (uib[i].userId == uid) {
+        recordExists = true;
+      }
+    }
+    if (recordExists == false) {
+      usersInRooms.add({
+        'userId': uid,
+        'roomId': roomId,
+      });
+    } else {
+      var collection = FirebaseFirestore.instance
+          .collection('usersInRooms')
+          .where('userId', isEqualTo: auth.currentUser?.uid.toString());
+      var snapshots = await collection.get();
+      for (var doc in snapshots.docs) {
+        await doc.reference.delete();
+      }
     }
   }
 

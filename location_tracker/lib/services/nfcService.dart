@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:location_tracker/services/firestore.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
 class NfcService {
   NfcService();
+  FirestoreService firestoreService = FirestoreService();
 
   ValueNotifier<dynamic> result = ValueNotifier(null);
 
@@ -36,6 +38,17 @@ class NfcService {
 
       if (kDebugMode) {
         print(finalResult);
+      }
+
+      List rooms = await firestoreService.getAllRooms();
+      bool flag = false;
+      for (int i = 0; i < rooms.length; i++) {
+        if (finalResult == rooms[i].id) {
+          flag = true;
+        }
+      }
+      if (flag == true) {
+        await firestoreService.addOrRemoveUserInRooms(finalResult);
       }
 
       NfcManager.instance.stopSession();
