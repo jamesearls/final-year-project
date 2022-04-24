@@ -2,88 +2,36 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geofence_service/geofence_service.dart';
 import 'package:location_tracker/models/user_location.dart';
 import 'package:provider/provider.dart';
+
+import '../../services/geofencing_service.dart';
 
 double lat = 0.0;
 double lng = 0.0;
 
 class MapScreen extends StatefulWidget {
+  const MapScreen({Key? key}) : super(key: key);
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
 
   @override
   void initState() {
     super.initState();
+    GeofencingService().geofenceCallbacks();
     _setMarkerIcon();
     _setCircles();
-
-    //Geofencing initstate
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _geofenceService
-          .addGeofenceStatusChangeListener(_onGeofenceStatusChanged);
-      // _geofenceService.addLocationChangeListener(_onLocationChanged);
-      _geofenceService.addLocationServicesStatusChangeListener(
-          _onLocationServicesStatusChanged);
-      _geofenceService.addStreamErrorListener(_onError);
-      _geofenceService.start(_geofenceList).catchError(_onError);
-    });
   }
-
-  // Geofensing service
-  final _geofenceStreamController = StreamController<Geofence>();
-
-  // Create a [GeofenceService] instance and set options.
-  final _geofenceService = GeofenceService.instance.setup(
-      interval: 5000,
-      accuracy: 100,
-      loiteringDelayMs: 60000,
-      statusChangeDelayMs: 10000,
-      useActivityRecognition: false,
-      allowMockLocations: false,
-      printDevLog: false,
-      geofenceRadiusSortType: GeofenceRadiusSortType.DESC);
-
-  // Create a [Geofence] list.
-  final _geofenceList = <Geofence>[
-    Geofence(
-      id: 'The CSB',
-      latitude: 54.5817,
-      longitude: -5.9377,
-      radius: [
-        GeofenceRadius(id: 'radius_50m', length: 50),
-      ],
-    ),
-    Geofence(
-      id: 'The Lanyon Building',
-      latitude: 54.5845,
-      longitude: -5.9350,
-      radius: [
-        GeofenceRadius(id: 'radius_50m', length: 50),
-      ],
-    ),
-    Geofence(
-      id: 'The Ashby Building',
-      latitude: 54.5800,
-      longitude: -5.9354,
-      radius: [
-        GeofenceRadius(id: 'radius_50m', length: 50),
-      ],
-    ),
-  ];
 
   final Set<Marker> _markers = HashSet<Marker>();
   final Set<Circle> _circles = HashSet<Circle>();
 
   late BitmapDescriptor _markerIcon;
-
-  String _currentLocationMessage =
-      "Geofencing service not started, please walk into range of your organisation";
 
   void _setMarkerIcon() async {
     _markerIcon = await BitmapDescriptor.fromAssetImage(
@@ -147,55 +95,13 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  // This function is to be called when a location services status change occurs
-  // since the service was started.
-  void _onLocationServicesStatusChanged(bool status) {
-    print('isLocationServicesEnabled: $status');
-  }
-
-  // This function is used to handle errors that occur in the service.
-  //possibly not necessary
-  void _onError(error) {
-    final errorCode = getErrorCodesFromError(error);
-    if (errorCode == null) {
-      print('Undefined error: $error');
-      return;
-    }
-    print('ErrorCode: $errorCode');
-  }
-
-  //Geofence status change method
-  Future<void> _onGeofenceStatusChanged(
-      Geofence geofence,
-      GeofenceRadius geofenceRadius,
-      GeofenceStatus geofenceStatus,
-      Location location) async {
-    print('geofenceStatus: ${geofenceStatus.toString()}');
-    if (geofenceStatus.toString() == "GeofenceStatus.ENTER") {
-      setState(() {
-        _currentLocationMessage = geofence.id.toString();
-      });
-
-      print("Yer in ${geofence.id} now bai");
-    }
-    if (geofenceStatus.toString() == "GeofenceStatus.EXIT") {
-      setState(() {
-        _currentLocationMessage =
-            "No longer in within range of a building in your Org";
-      });
-
-      print("Yer not in within range of your organisation, that's an L");
-    }
-
-    _geofenceStreamController.sink.add(geofence);
-  }
-
   @override
   Widget build(BuildContext context) {
     var userLocation = Provider.of<UserLocation?>(context);
     lat = userLocation?.lat ?? 0.0;
     lng = userLocation?.lng ?? 0.0;
 
+    String _currentLocationMessage = "You are in the ";
     return Scaffold(
         appBar: AppBar(
           title: const Text('Map'),
@@ -207,19 +113,19 @@ class _MapScreenState extends State<MapScreen> {
                   CameraPosition(target: LatLng(lat, lng), zoom: 16),
               markers: _markers,
               circles: _circles,
+              zoomGesturesEnabled: false,
+              buildingsEnabled: false,
               myLocationButtonEnabled: true,
               zoomControlsEnabled: false,
               myLocationEnabled: true,
               scrollGesturesEnabled: false,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
+              onMapCreated: _onMapCreated,
             ),
             Container(
               alignment: Alignment.bottomCenter,
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 32),
               child: Text(
-                _currentLocationMessage,
+                GeofencingService.getCurrentGeofenceId(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.black,
@@ -234,11 +140,5 @@ class _MapScreenState extends State<MapScreen> {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(lat, lng), zoom: 16.0)));
-  }
-
-  @override
-  void dispose() {
-    _geofenceStreamController.close();
-    super.dispose();
   }
 }

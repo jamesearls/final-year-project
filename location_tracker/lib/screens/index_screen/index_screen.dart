@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/buildings/buildings.dart';
@@ -6,6 +8,8 @@ import 'package:location_tracker/shared/bottom_nav.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
 import 'package:location_tracker/shared/locationText.dart';
+
+import '../../services/geofencing_service.dart';
 
 class IndexScreen extends StatefulWidget {
   const IndexScreen({Key? key}) : super(key: key);
@@ -18,7 +22,7 @@ class _IndexScreenState extends State<IndexScreen> {
   @override
   void initState() {
     super.initState();
-    // getLocation();
+    GeofencingService().geofenceCallbacks();
   }
 
   @override
@@ -53,7 +57,7 @@ class _IndexScreenState extends State<IndexScreen> {
                 const LocationText(),
               ],
             ),
-            bottomNavigationBar: const BottomNavBar(),
+            bottomNavigationBar: BottomNavBar(),
           );
         } else {}
         return const Text('No buildings found in Firestore. Check DB');

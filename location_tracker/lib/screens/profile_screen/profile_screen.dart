@@ -1,85 +1,59 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:location_tracker/utils/fire_auth.dart';
-import '../../services/auth.dart';
-import '../login_screen/login_screen.dart';
+import 'package:location_tracker/services/auth.dart';
+import 'package:location_tracker/shared/loading.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
-  @override
-  _ProfileScreenState createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'NAME: ${AuthService().getUserName()}',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              'EMAIL: ${AuthService().getUserEmail()}',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(height: 16.0),
-            AuthService().getUserVerified()
-                ? Text(
-                    'Email verified',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.green),
-                  )
-                : Text(
-                    'Email not verified',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.red),
+    var user = AuthService().user;
+
+    if (user != null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(user.displayName ?? 'Guest'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                margin: const EdgeInsets.only(top: 50),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage(user.photoURL ??
+                        'https://www.gravatar.com/avatar/placeholder'),
                   ),
-            // Add widgets for verifying email
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     await _currentUser.sendEmailVerification();
-            //   },
-            //   child: const Text('Verify email'),
-            // ),
-            // IconButton(
-            //   icon: const Icon(Icons.refresh),
-            //   onPressed: () async {
-            //     User? user = await FireAuth.refreshUser(_currentUser);
-            //     if (user != null) {
-            //       setState(() {
-            //         _currentUser = user;
-            //       });
-            //     }
-            //   },
-            // ),
-            ElevatedButton(
+                ),
+              ),
+              Text(user.email ?? '',
+                  style: Theme.of(context).textTheme.headline6),
+              // const Spacer(),
+              // Text('${report.total}',
+              //     style: Theme.of(context).textTheme.headline2),
+              // Text('Quizzes Completed',
+              //     style: Theme.of(context).textTheme.subtitle2),
+              const Spacer(),
+              ElevatedButton(
+                child: const Text('logout'),
                 onPressed: () async {
                   await AuthService().signOut();
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil('/', (route) => false);
                 },
-                child: const Text('Sign out'))
-            // and, signing out the user
-          ],
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return const Loader();
+    }
   }
 }

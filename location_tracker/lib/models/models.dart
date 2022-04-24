@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'models.g.dart';
 
 @JsonSerializable()
 class Building {
-  final String id;
+  late final String id;
   final String name;
   final double lat;
   final double lng;
@@ -56,6 +57,11 @@ class UsersInBuildings {
   final String userId;
 
   UsersInBuildings({this.buildingId = '', this.userId = ''});
+  factory UsersInBuildings.fromJson(Map<String, dynamic> json) =>
+      _$UsersInBuildingsFromJson(json);
+  Map<String, dynamic> toJson() => _$UsersInBuildingsToJson(this);
+
+  static fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> doc) {}
 }
 
 @JsonSerializable()

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:location_tracker/models/user_location.dart';
 import 'package:location_tracker/services/firestore.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
+import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../models/models.dart';
 import '../Rooms/rooms.dart';
@@ -94,13 +97,9 @@ class BuildingScreen extends StatelessWidget {
                 FutureBuilder(
                   future: FirestoreService().getUsersInBuildings(building.id),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    return Text(
-                      '${snapshot.data}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    );
+                    var userLocation =
+                        Provider.of<UserLocation?>(context); // important
+                    return Text(snapshot.data);
                   },
                 ),
               ],

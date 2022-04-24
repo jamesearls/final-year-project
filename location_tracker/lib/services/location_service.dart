@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:location/location.dart';
 import 'package:location_tracker/models/user_location.dart';
 
@@ -10,6 +11,8 @@ class LocationService {
   // Continuously emit location updates
   final StreamController<UserLocation> _locationController =
       StreamController<UserLocation>.broadcast();
+
+  Stream<UserLocation> get locationStream => _locationController.stream;
 
   LocationService() {
     location.requestPermission().then((granted) {
@@ -24,8 +27,6 @@ class LocationService {
     });
   }
 
-  Stream<UserLocation> get locationStream => _locationController.stream;
-
   Future<UserLocation> getLocation() async {
     try {
       var userLocation = await location.getLocation();
@@ -34,7 +35,9 @@ class LocationService {
         lng: userLocation.longitude!,
       );
     } catch (e) {
-      print('Could not get the location: $e');
+      if (kDebugMode) {
+        print('Could not get the location: $e');
+      }
     }
 
     return _currentLocation;
