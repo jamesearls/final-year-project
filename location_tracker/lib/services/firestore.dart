@@ -44,7 +44,7 @@ class FirestoreService {
     var ref = _db.collection('usersInBuildings');
     var snapshot = await ref.get();
     var data = snapshot.docs.map((s) => s.data());
-    var usersInBuildings = data.map((d) => UsersInBuildings.fromJson(d));
+    var usersInBuildings = data.map((d) => UserInBuilding.fromJson(d));
     return usersInBuildings.toList();
   }
 
@@ -52,19 +52,28 @@ class FirestoreService {
     var ref = _db.collection('usersInRooms');
     var snapshot = await ref.get();
     var data = snapshot.docs.map((s) => s.data());
-    var usersInRooms = data.map((d) => UsersInRooms.fromJson(d));
+    var usersInRooms = data.map((d) => UserInRoom.fromJson(d));
     return usersInRooms.toList();
   }
 
+  Future<List<UserInBuilding>> getAllUsersInBuildings2() async {
+    var ref = _db.collection('usersInBuildings');
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var usersInBuildings = data.map((d) => UserInBuilding.fromJson(d));
+    return usersInBuildings.toList();
+    ;
+  }
+
   // Method to return number of documents UsersinBuilding with buildingId
-  Future<String> getUsersInBuildings(String buildingId) async {
+  Future<int> getUsersInBuildings(String buildingId) async {
     var ref = _db
         .collection('usersInBuildings')
         .where('buildingId', isEqualTo: buildingId);
     var snapshot = await ref.get();
     var data = snapshot.docs.map((s) => s.data());
     int length = data.length;
-    return 'Number of users: $length';
+    return length;
   }
 
   // Method to return number of documents UsersinRoom with roomId
@@ -73,7 +82,7 @@ class FirestoreService {
     var snapshot = await ref.get();
     var data = snapshot.docs.map((s) => s.data());
     int length = data.length;
-    return 'Number of users: $length';
+    return 'Number of Occupants: $length';
   }
 
   // Listens to number of docs in usersInBuildings collection
@@ -117,6 +126,20 @@ class FirestoreService {
     }
 
     return building;
+  }
+
+  //Get current buildingId
+  Future<String> getCurrentBuildingId() async {
+    String buildingId = '';
+    List uib = await getAllUsersInBuildings();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String? uid = auth.currentUser?.uid.toString() ?? "not working";
+    for (var i = 0; i < uib.length; i++) {
+      if (uib[i].userId == uid) {
+        buildingId = uib[i].buildingId;
+      }
+    }
+    return buildingId;
   }
 
   //Method to add document to UsersInBuildings collection
@@ -187,4 +210,28 @@ class FirestoreService {
   }
 
   // Method to add document to UsersInRooms collection
+
+// Listen to number of docs in usersInBuildings collection
+  Stream<int> streamUsersInBuildingCount() {
+    return _db
+        .collection('usersInBuildings')
+        .where('buildingId', isEqualTo: getCurrentBuildingId())
+        .snapshots()
+        .length
+        .asStream();
+  }
+
+  Stream<int> streamUsersInRoomsCount(String roomId) {
+    return _db
+        .collection('usersInRooms')
+        .where('roomId', isEqualTo: roomId)
+        .snapshots()
+        .length
+        .asStream();
+  }
+
+  Stream<List<UserInBuilding>?> streamUsersInBuildings() {
+    Future<List<UserInBuilding>> uib = getAllUsersInBuildings2();
+    return uib.asStream();
+  }
 }

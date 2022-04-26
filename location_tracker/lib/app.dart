@@ -25,6 +25,9 @@ class App extends StatelessWidget {
         StreamProvider<GeofenceModel?>(
             initialData: null,
             create: (context) => GeofencingService().geofenceStream),
+        StreamProvider<Iterable<UsersInBuildings>?>(
+            initialData: null,
+            create: (context) => FirestoreService().streamUsersInBuildings()),
       ],
       child: MaterialApp(
         routes: appRoutes,

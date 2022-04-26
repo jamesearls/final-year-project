@@ -9,13 +9,15 @@ class Building {
   final double lat;
   final double lng;
   final String img;
-// add description here
+  final String desc;
+
   Building({
     this.id = '',
     this.lat = 0.0,
     this.lng = 0.0,
     this.img = 'default.png',
     this.name = '',
+    this.desc = '',
   });
 
   factory Building.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +32,7 @@ class Room {
   final int maxUsers;
   final String name;
   final String img;
+  final String desc;
 
   Room({
     this.id = '',
@@ -37,6 +40,7 @@ class Room {
     this.maxUsers = 0,
     this.name = '',
     this.img = 'default.png',
+    this.desc = '',
   });
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
   Map<String, dynamic> toJson() => _$RoomToJson(this);
