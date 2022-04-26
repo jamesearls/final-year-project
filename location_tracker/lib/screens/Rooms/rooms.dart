@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:location_tracker/services/firestore.dart';
+import 'package:location_tracker/shared/occupantCount.dart';
+import 'package:location_tracker/shared/progress_bar.dart';
 
 import '../../models/models.dart';
 
@@ -48,6 +50,7 @@ class RoomView extends StatelessWidget {
                   ),
                 ),
               ),
+              Flexible(child: RoomCapacity(room: room)),
             ],
           ),
         ),
@@ -78,19 +81,7 @@ class RoomScreen extends StatelessWidget {
           style: const TextStyle(
               height: 2, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        FutureBuilder(
-          future:
-              FirestoreService().getUsersInRooms(room.id), // rooms need id's
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            return Text(
-              '${snapshot.data}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            );
-          },
-        ),
+        RoomCount(roomId: room.id)
       ]),
     );
   }

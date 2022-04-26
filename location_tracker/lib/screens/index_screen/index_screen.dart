@@ -84,9 +84,6 @@ class _IndexScreenState extends State<IndexScreen> {
                   backgroundColor: Colors.deepPurple,
                   child: const Icon(FontAwesomeIcons.nfcSymbol),
                 ),
-                FloatingActionButton(onPressed: () {
-                  // print(usersInBuildings);
-                })
               ],
             ),
             bottomNavigationBar: BottomNavBar(),

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:location_tracker/models/user_location.dart';
 import 'package:location_tracker/services/firestore.dart';
+import 'package:location_tracker/shared/occupantCount.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
-import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:location_tracker/shared/progress_bar.dart';
 
 import '../../models/models.dart';
 import '../Rooms/rooms.dart';
@@ -55,6 +54,7 @@ class BuildingView extends StatelessWidget {
                   ),
                 ),
               ),
+              Flexible(child: BuildingCapacity(building: building)),
             ],
           ),
         ),
@@ -94,14 +94,7 @@ class BuildingScreen extends StatelessWidget {
                         rooms.map((room) => RoomView(room: room)).toList(),
                   ),
                 ),
-                FutureBuilder(
-                  future: FirestoreService().getUsersInBuildings(building.id),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    var userLocation =
-                        Provider.of<UserLocation?>(context); // important
-                    return Text(snapshot.data);
-                  },
-                ),
+                BuildingCount(buildingId: building.id),
               ],
             ),
           );

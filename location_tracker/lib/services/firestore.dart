@@ -212,26 +212,16 @@ class FirestoreService {
   // Method to add document to UsersInRooms collection
 
 // Listen to number of docs in usersInBuildings collection
-  Stream<int> streamUsersInBuildingCount() {
-    return _db
-        .collection('usersInBuildings')
-        .where('buildingId', isEqualTo: getCurrentBuildingId())
-        .snapshots()
-        .length
-        .asStream();
+
+  Stream<List<UserInBuilding>> streamUsersInBuildings() {
+    return _db.collection('usersInBuildings').snapshots().map((snapShot) =>
+        snapShot.docs
+            .map((doc) => UserInBuilding.fromJson(doc.data()))
+            .toList());
   }
 
-  Stream<int> streamUsersInRoomsCount(String roomId) {
-    return _db
-        .collection('usersInRooms')
-        .where('roomId', isEqualTo: roomId)
-        .snapshots()
-        .length
-        .asStream();
-  }
-
-  Stream<List<UserInBuilding>?> streamUsersInBuildings() {
-    Future<List<UserInBuilding>> uib = getAllUsersInBuildings2();
-    return uib.asStream();
+  Stream<List<UserInRoom>> streamUsersInRooms() {
+    return _db.collection('usersInRooms').snapshots().map((snapShot) =>
+        snapShot.docs.map((doc) => UserInRoom.fromJson(doc.data())).toList());
   }
 }

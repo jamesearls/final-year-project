@@ -12,6 +12,8 @@ Building _$BuildingFromJson(Map<String, dynamic> json) => Building(
       lng: (json['lng'] as num?)?.toDouble() ?? 0.0,
       img: json['img'] as String? ?? 'default.png',
       name: json['name'] as String? ?? '',
+      desc: json['desc'] as String? ?? '',
+      capacity: json['capacity'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$BuildingToJson(Building instance) => <String, dynamic>{
@@ -20,22 +22,26 @@ Map<String, dynamic> _$BuildingToJson(Building instance) => <String, dynamic>{
       'lat': instance.lat,
       'lng': instance.lng,
       'img': instance.img,
+      'desc': instance.desc,
+      'capacity': instance.capacity,
     };
 
 Room _$RoomFromJson(Map<String, dynamic> json) => Room(
       id: json['id'] as String? ?? '',
       buildingId: json['buildingId'] as String? ?? '',
-      maxUsers: json['maxUsers'] as int? ?? 0,
+      capacity: json['capacity'] as int? ?? 0,
       name: json['name'] as String? ?? '',
       img: json['img'] as String? ?? 'default.png',
+      desc: json['desc'] as String? ?? '',
     );
 
 Map<String, dynamic> _$RoomToJson(Room instance) => <String, dynamic>{
       'id': instance.id,
       'buildingId': instance.buildingId,
-      'maxUsers': instance.maxUsers,
+      'capacity': instance.capacity,
       'name': instance.name,
       'img': instance.img,
+      'desc': instance.desc,
     };
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
@@ -50,24 +56,24 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'name': instance.name,
     };
 
-UsersInBuildings _$UsersInBuildingsFromJson(Map<String, dynamic> json) =>
-    UsersInBuildings(
+UserInBuilding _$UserInBuildingFromJson(Map<String, dynamic> json) =>
+    UserInBuilding(
       buildingId: json['buildingId'] as String? ?? '',
       userId: json['userId'] as String? ?? '',
     );
 
-Map<String, dynamic> _$UsersInBuildingsToJson(UsersInBuildings instance) =>
+Map<String, dynamic> _$UserInBuildingToJson(UserInBuilding instance) =>
     <String, dynamic>{
       'buildingId': instance.buildingId,
       'userId': instance.userId,
     };
 
-UsersInRooms _$UsersInRoomsFromJson(Map<String, dynamic> json) => UsersInRooms(
+UserInRoom _$UserInRoomFromJson(Map<String, dynamic> json) => UserInRoom(
       roomId: json['roomId'] as String? ?? '',
       userId: json['userId'] as String? ?? '',
     );
 
-Map<String, dynamic> _$UsersInRoomsToJson(UsersInRooms instance) =>
+Map<String, dynamic> _$UserInRoomToJson(UserInRoom instance) =>
     <String, dynamic>{
       'roomId': instance.roomId,
       'userId': instance.userId,

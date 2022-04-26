@@ -10,6 +10,7 @@ class Building {
   final double lng;
   final String img;
   final String desc;
+  final int capacity;
 
   Building({
     this.id = '',
@@ -18,6 +19,7 @@ class Building {
     this.img = 'default.png',
     this.name = '',
     this.desc = '',
+    this.capacity = 0,
   });
 
   factory Building.fromJson(Map<String, dynamic> json) =>
@@ -29,7 +31,7 @@ class Building {
 class Room {
   final String id;
   final String buildingId;
-  final int maxUsers;
+  final int capacity;
   final String name;
   final String img;
   final String desc;
@@ -37,7 +39,7 @@ class Room {
   Room({
     this.id = '',
     this.buildingId = '',
-    this.maxUsers = 0,
+    this.capacity = 0,
     this.name = '',
     this.img = 'default.png',
     this.desc = '',
@@ -56,25 +58,25 @@ class User {
 }
 
 @JsonSerializable()
-class UsersInBuildings {
+class UserInBuilding {
   final String buildingId;
   final String userId;
 
-  UsersInBuildings({this.buildingId = '', this.userId = ''});
-  factory UsersInBuildings.fromJson(Map<String, dynamic> json) =>
-      _$UsersInBuildingsFromJson(json);
-  Map<String, dynamic> toJson() => _$UsersInBuildingsToJson(this);
+  UserInBuilding({this.buildingId = '', this.userId = ''});
+  factory UserInBuilding.fromJson(Map<String, dynamic> json) =>
+      _$UserInBuildingFromJson(json);
+  Map<String, dynamic> toJson() => _$UserInBuildingToJson(this);
 
   static fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> doc) {}
 }
 
 @JsonSerializable()
-class UsersInRooms {
+class UserInRoom {
   final String roomId;
   final String userId;
 
-  UsersInRooms({this.roomId = '', this.userId = ''});
-  factory UsersInRooms.fromJson(Map<String, dynamic> json) =>
-      _$UsersInRoomsFromJson(json);
-  Map<String, dynamic> toJson() => _$UsersInRoomsToJson(this);
+  UserInRoom({this.roomId = '', this.userId = ''});
+  factory UserInRoom.fromJson(Map<String, dynamic> json) =>
+      _$UserInRoomFromJson(json);
+  Map<String, dynamic> toJson() => _$UserInRoomToJson(this);
 }
