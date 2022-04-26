@@ -47,7 +47,7 @@ dependencies:
 
 
   # Google Icon
-  font_awesome_flutter: ^9.2.0
+  font_awesome_flutter: ^10.1.0
 
   # Google Fonts
   google_fonts: ^2.3.1
@@ -63,6 +63,7 @@ dependencies:
   location: ^4.3.0
   geofence_service: ^3.4.8
   rxdart: ^0.27.3
+  nfc_manager: ^3.1.1
 
 dev_dependencies:
   flutter_test:
