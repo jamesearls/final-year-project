@@ -10,7 +10,6 @@ import 'package:location_tracker/shared/bottom_nav.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
 import 'package:location_tracker/shared/locationText.dart';
-import 'package:provider/provider.dart';
 
 import '../../services/geofencing_service.dart';
 
@@ -23,8 +22,6 @@ class IndexScreen extends StatefulWidget {
 
 class _IndexScreenState extends State<IndexScreen> {
   NfcService nfcService = NfcService();
-
-  //provider
 
   @override
   void initState() {

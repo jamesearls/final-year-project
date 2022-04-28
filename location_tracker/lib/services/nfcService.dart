@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:location_tracker/services/firestore.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 
