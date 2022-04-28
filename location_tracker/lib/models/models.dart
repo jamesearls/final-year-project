@@ -55,6 +55,8 @@ class User {
   final String name;
 
   User({this.email = '', this.isAdmin = false, this.name = ''});
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
 @JsonSerializable()

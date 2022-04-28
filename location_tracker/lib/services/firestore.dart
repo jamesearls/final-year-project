@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
+import 'package:location_tracker/services/auth.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:location_tracker/models/models.dart';
 
@@ -211,7 +212,7 @@ class FirestoreService {
 
   // Method to add document to UsersInRooms collection
 
-// Listen to number of docs in usersInBuildings collection
+// Listen to usersInBuildings collection
 
   Stream<List<UserInBuilding>> streamUsersInBuildings() {
     return _db.collection('usersInBuildings').snapshots().map((snapShot) =>
@@ -220,8 +221,21 @@ class FirestoreService {
             .toList());
   }
 
+// Listen to usersInRooms collection
   Stream<List<UserInRoom>> streamUsersInRooms() {
     return _db.collection('usersInRooms').snapshots().map((snapShot) =>
         snapShot.docs.map((doc) => UserInRoom.fromJson(doc.data())).toList());
+  }
+
+// Listen to users collection
+  Stream<User> streamUser() {
+    return AuthService().userStream.switchMap((user) {
+      if (user != null) {
+        var ref = _db.collection('users').doc(user.uid);
+        return ref.snapshots().map((doc) => User.fromJson(doc.data()!));
+      } else {
+        return Stream.fromIterable([User()]);
+      }
+    });
   }
 }
