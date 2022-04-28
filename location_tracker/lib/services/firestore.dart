@@ -86,6 +86,15 @@ class FirestoreService {
     return 'Number of Occupants: $length';
   }
 
+  // Method to return list of users
+  Future<List<User>> getAllUsers() async {
+    var ref = _db.collection('users');
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var users = data.map((d) => User.fromJson(d));
+    return users.toList();
+  }
+
   // Listens to number of docs in usersInBuildings collection
 
   // Listens to number of docs in usersInRooms collection
@@ -95,14 +104,28 @@ class FirestoreService {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     FirebaseAuth auth = FirebaseAuth.instance;
     String? uid = auth.currentUser?.uid.toString() ?? "not working";
-    users.doc(uid).set({
-      'uid': uid,
-      'email': auth.currentUser?.email ?? "not working",
-      'displayName': auth.currentUser?.displayName ?? "not working",
-      'photoUrl': auth.currentUser?.photoURL ?? "default.png",
-      'lastSeen': DateTime.now(),
-      'isAdmin': false,
-    });
+    bool existingUser = false;
+    List usersList = await getAllUsers();
+
+    for (int i = 0; i < usersList.length; i++) {
+      if (usersList[i].uid == uid) {
+        existingUser = true;
+      }
+    }
+    if (existingUser == false) {
+      users.doc(uid).set({
+        'uid': uid,
+        'email': auth.currentUser?.email ?? "guest",
+        'displayName': auth.currentUser?.displayName ?? "guest",
+        'photoUrl': auth.currentUser?.photoURL ?? "default.png",
+        'lastSeen': DateTime.now(),
+        'isAdmin': false,
+      });
+    } else {
+      users.doc(uid).update({
+        'lastSeen': DateTime.now(),
+      });
+    }
     return;
   }
 

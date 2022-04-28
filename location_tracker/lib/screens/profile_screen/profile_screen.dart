@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/services/auth.dart';
 import 'package:location_tracker/shared/loading.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -8,6 +10,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var user = AuthService().user;
+    User userModel = Provider.of<User>(context);
 
     if (user != null) {
       return Scaffold(
@@ -33,11 +36,10 @@ class ProfileScreen extends StatelessWidget {
               ),
               Text(user.email ?? '',
                   style: Theme.of(context).textTheme.headline6),
-              // const Spacer(),
-              // Text('${report.total}',
-              //     style: Theme.of(context).textTheme.headline2),
-              // Text('Quizzes Completed',
-              //     style: Theme.of(context).textTheme.subtitle2),
+              Text(user.displayName ?? '',
+                  style: Theme.of(context).textTheme.headline6),
+              Text(userModel.isAdmin ? 'Admin User' : 'Standard User',
+                  style: Theme.of(context).textTheme.headline6),
               const Spacer(),
               ElevatedButton(
                 child: const Text('logout'),

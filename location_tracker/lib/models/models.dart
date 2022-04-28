@@ -50,11 +50,18 @@ class Room {
 
 @JsonSerializable()
 class User {
+  final String displayName;
   final String email;
   final bool isAdmin;
-  final String name;
+  final String photoUrl;
+  final String uid;
 
-  User({this.email = '', this.isAdmin = false, this.name = ''});
+  User(
+      {this.photoUrl = '',
+      this.uid = '',
+      this.email = '',
+      this.isAdmin = false,
+      this.displayName = ''});
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }

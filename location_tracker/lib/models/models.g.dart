@@ -45,15 +45,19 @@ Map<String, dynamic> _$RoomToJson(Room instance) => <String, dynamic>{
     };
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
+      photoUrl: json['photoUrl'] as String? ?? '',
+      uid: json['uid'] as String? ?? '',
       email: json['email'] as String? ?? '',
       isAdmin: json['isAdmin'] as bool? ?? false,
-      name: json['name'] as String? ?? '',
+      displayName: json['displayName'] as String? ?? '',
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+      'displayName': instance.displayName,
       'email': instance.email,
       'isAdmin': instance.isAdmin,
-      'name': instance.name,
+      'photoUrl': instance.photoUrl,
+      'uid': instance.uid,
     };
 
 UserInBuilding _$UserInBuildingFromJson(Map<String, dynamic> json) =>
