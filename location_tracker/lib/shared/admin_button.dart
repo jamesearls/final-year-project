@@ -16,6 +16,7 @@ class AdminButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(8),
           child: FloatingActionButton.extended(
+            backgroundColor: Colors.deepPurple,
             onPressed: () {
               Navigator.pushNamed(context, '/admin');
             },
@@ -23,7 +24,10 @@ class AdminButton extends StatelessWidget {
               FontAwesomeIcons.userShield,
               color: Colors.white,
             ),
-            label: const Text('Admin'),
+            label: const Text(
+              'Admin',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       );

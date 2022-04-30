@@ -9,5 +9,5 @@ var appRoutes = {
   // '/register': (context) => RegisterScreen(),
   '/profile': (context) => const ProfileScreen(),
   '/map': (context) => const MapScreen(),
-  '/admin': (context) => const AdminScreen(),
+  '/admin': (context) => AdminPageView(),
 };

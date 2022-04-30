@@ -1,4 +1,6 @@
-export 'admin/admin_screen.dart';
+export 'admin/admin_building_screen.dart';
+export 'admin/admin_page_view.dart';
+export 'admin/admin_room_screen.dart';
 export 'buildings/buildings.dart';
 export 'home_screen/home_screen.dart';
 export 'index_screen/index_screen.dart';
