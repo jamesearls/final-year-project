@@ -89,3 +89,21 @@ class UserInRoom {
       _$UserInRoomFromJson(json);
   Map<String, dynamic> toJson() => _$UserInRoomToJson(this);
 }
+
+@JsonSerializable()
+class Log {
+  final String buildingId;
+  final bool entry;
+  final String userId;
+  final String? roomId;
+  var timestamp;
+  Log(
+      {this.timestamp = 0,
+      this.buildingId = '',
+      this.entry = true,
+      this.userId = "",
+      this.roomId = ""});
+
+  factory Log.fromJson(Map<String, dynamic> json) => _$LogFromJson(json);
+  Map<String, dynamic> toJson() => _$LogToJson(this);
+}

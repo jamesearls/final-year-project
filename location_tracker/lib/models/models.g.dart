@@ -82,3 +82,19 @@ Map<String, dynamic> _$UserInRoomToJson(UserInRoom instance) =>
       'roomId': instance.roomId,
       'userId': instance.userId,
     };
+
+Log _$LogFromJson(Map<String, dynamic> json) => Log(
+      timestamp: json['timestamp'] ?? 0,
+      buildingId: json['buildingId'] as String? ?? '',
+      entry: json['entry'] as bool? ?? true,
+      userId: json['userId'] as String? ?? "",
+      roomId: json['roomId'] as String? ?? "",
+    );
+
+Map<String, dynamic> _$LogToJson(Log instance) => <String, dynamic>{
+      'buildingId': instance.buildingId,
+      'entry': instance.entry,
+      'userId': instance.userId,
+      'roomId': instance.roomId,
+      'timestamp': instance.timestamp,
+    };

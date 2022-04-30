@@ -261,4 +261,23 @@ class FirestoreService {
       }
     });
   }
+
+  Stream<List<Log>> streamLogs() {
+    return _db.collection('logs').snapshots().map((snapShot) =>
+        snapShot.docs.map((doc) => Log.fromJson(doc.data())).toList());
+  }
+
+  // add log
+  Future<void> addLog(String buildingId, bool entry, [String? roomId]) async {
+    CollectionReference logs = FirebaseFirestore.instance.collection('logs');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String? uid = auth.currentUser?.uid.toString() ?? "unknown user";
+    logs.add({
+      'buildingId': buildingId,
+      'entry': entry,
+      'roomid': roomId,
+      'timestamp': Timestamp.now(),
+      'userId': uid,
+    });
+  }
 }
