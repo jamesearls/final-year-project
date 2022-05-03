@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:location_tracker/models/models.dart';
+import 'package:location_tracker/screens/admin/building_pie_chart.dart';
 import 'package:location_tracker/screens/admin/log_list.dart';
+import 'package:location_tracker/services/firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class AdminBuildingScreen extends StatefulWidget {
   const AdminBuildingScreen({Key? key}) : super(key: key);
@@ -12,18 +14,18 @@ class AdminBuildingScreen extends StatefulWidget {
 }
 
 class _AdminBuildingScreenState extends State<AdminBuildingScreen> {
+  List logs = [];
   @override
   Widget build(BuildContext context) {
-    List logs = Provider.of<List<Log>>(context);
-    // sort logs by timestamp
-    logs.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+    List<Log>? logStream = Provider.of<List<Log>?>(context);
+
     final isSelected = <bool>[false, false, false];
     return Scaffold(
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.13,
+              height: MediaQuery.of(context).size.height * 0.15,
               child: DrawerHeader(
                 margin: EdgeInsets.zero,
                 decoration: BoxDecoration(
@@ -32,25 +34,53 @@ class _AdminBuildingScreenState extends State<AdminBuildingScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text('Logs'),
+                    const Text('Logs '),
+                    Text(
+                      '${logs.length} logs loaded',
+                      style: const TextStyle(fontSize: 10, color: Colors.grey),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         ToggleButtons(
                           color: Colors.white,
-                          selectedColor: Colors.white,
-                          selectedBorderColor: Color(0xFF6200EE),
-                          fillColor: Color(0xFF6200EE).withOpacity(0.08),
-                          splashColor: Color(0xFF6200EE).withOpacity(0.12),
-                          hoverColor: Color(0xFF6200EE).withOpacity(0.04),
+                          selectedColor: Colors.black,
+                          selectedBorderColor: const Color(0xFF6200EE),
+                          fillColor: const Color(0xFF6200EE).withOpacity(0.08),
+                          splashColor:
+                              const Color(0xFF6200EE).withOpacity(0.12),
+                          hoverColor: const Color(0xFF6200EE).withOpacity(0.04),
                           borderRadius: BorderRadius.circular(4.0),
-                          constraints: BoxConstraints(minHeight: 36.0),
+                          constraints: const BoxConstraints(minHeight: 36.0),
                           isSelected: isSelected,
-                          onPressed: (index) {
-                            // Respond to button selection
-                            setState(() {
-                              isSelected[index] = !isSelected[index];
-                            });
+                          onPressed: (int index) async {
+                            switch (index) {
+                              case 0:
+                                List newlogs =
+                                    await FirestoreService().getTodaysLogs();
+                                setState(() {
+                                  isSelected[0] = !isSelected[0];
+                                  logs = newlogs;
+                                });
+                                break;
+                              case 1:
+                                List newlogs = await FirestoreService()
+                                    .getLastMonthsLogs();
+                                setState(() {
+                                  isSelected[1] = !isSelected[1];
+                                  logs = newlogs;
+                                });
+                                break;
+                              case 2:
+                                logs = logStream ?? [];
+                                // sort logs by timestamp
+                                logs.sort((a, b) =>
+                                    b.timestamp.compareTo(a.timestamp));
+                                setState(() {
+                                  isSelected[2] = !isSelected[2];
+                                });
+                                break;
+                            }
                           },
                           children: const [
                             Padding(
@@ -59,7 +89,7 @@ class _AdminBuildingScreenState extends State<AdminBuildingScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 14.0),
-                              child: Text('This Month'),
+                              child: Text('Last Month'),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 14.0),
@@ -77,8 +107,13 @@ class _AdminBuildingScreenState extends State<AdminBuildingScreen> {
           ],
         ),
       ),
-      body: const Center(
-        child: Text('Building'),
+      body: ListView(
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: BuildingPieChart(choice: 0),
+          ),
+        ],
       ),
     );
   }
