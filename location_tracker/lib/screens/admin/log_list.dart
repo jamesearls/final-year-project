@@ -18,12 +18,12 @@ class LogList extends StatelessWidget {
     }
     if (log.roomId == "" || log.roomId == null) {
       return ListTile(
-        title: Text('${log.userId} $activity building ${log.buildingId}'),
+        title: Text('${log.userId} $activity building: ${log.buildingId}'),
         subtitle: Text(dateTime.toString()),
       );
     } else {
       return ListTile(
-        title: Text('${log.userId} $activity building ${log.roomId}'),
+        title: Text('${log.userId} $activity room: ${log.roomId}'),
         subtitle: Text(dateTime.toString()),
       );
     }
