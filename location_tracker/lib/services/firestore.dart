@@ -222,6 +222,7 @@ class FirestoreService {
         'userId': uid,
         'roomId': roomId,
       });
+      addRoomLog(roomId);
     } else {
       var collection = FirebaseFirestore.instance
           .collection('usersInRooms')
@@ -230,6 +231,7 @@ class FirestoreService {
       for (var doc in snapshots.docs) {
         await doc.reference.delete();
       }
+      removeRoomLog(roomId);
     }
   }
 
@@ -267,17 +269,84 @@ class FirestoreService {
         snapShot.docs.map((doc) => Log.fromJson(doc.data())).toList());
   }
 
-  // add log
-  Future<void> addLog(String buildingId, bool entry, [String? roomId]) async {
+  // add building log
+  Future<void> addLog(String buildingId, bool entry) async {
     CollectionReference logs = FirebaseFirestore.instance.collection('logs');
     FirebaseAuth auth = FirebaseAuth.instance;
     String? uid = auth.currentUser?.uid.toString() ?? "unknown user";
     logs.add({
       'buildingId': buildingId,
       'entry': entry,
-      'roomid': roomId,
       'timestamp': Timestamp.now(),
       'userId': uid,
     });
+  }
+
+  // add room entry log
+  Future<void> addRoomLog(String roomId) async {
+    CollectionReference logs = FirebaseFirestore.instance.collection('logs');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String? uid = auth.currentUser?.uid.toString() ?? "unknown user";
+
+    logs.add({
+      'roomId': roomId,
+      'entry': true,
+      'timestamp': Timestamp.now(),
+      'userId': uid,
+    });
+  }
+
+  // add room exit log
+  Future<void> removeRoomLog(String roomId) async {
+    CollectionReference logs = FirebaseFirestore.instance.collection('logs');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String? uid = auth.currentUser?.uid.toString() ?? "unknown user";
+
+    logs.add({
+      'roomId': roomId,
+      'entry': false,
+      'timestamp': Timestamp.now(),
+      'userId': uid,
+    });
+  }
+
+  Future<List<Log>> getTodaysLogs() async {
+    DateTime currentDate = DateTime.now();
+    DateTime queryDate = currentDate.subtract(const Duration(days: 1));
+    Timestamp timestamp = Timestamp.fromDate(queryDate);
+    var ref = _db
+        .collection('logs')
+        .where('timestamp', isGreaterThanOrEqualTo: timestamp)
+        .orderBy('timestamp', descending: true);
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var logs = data.map((d) => Log.fromJson(d));
+    return logs.toList();
+  }
+
+  Future<List<Log>> getLastMonthsLogs() async {
+    DateTime currentDate = DateTime.now();
+    DateTime x = currentDate.subtract(const Duration(days: 60));
+    Timestamp timestamp60 = Timestamp.fromDate(x);
+    DateTime y = currentDate.subtract(const Duration(days: 30));
+    Timestamp timestamp30 = Timestamp.fromDate(y);
+
+    var ref = _db
+        .collection('logs')
+        .where('timestamp', isLessThanOrEqualTo: timestamp30)
+        .where('timestamp', isGreaterThanOrEqualTo: timestamp60)
+        .orderBy('timestamp', descending: true);
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var logs = data.map((d) => Log.fromJson(d));
+    return logs.toList();
+  }
+
+  Future<List<Log>> getAllTimeLogs() async {
+    var ref = _db.collection('logs').orderBy('timestamp', descending: true);
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var logs = data.map((d) => Log.fromJson(d));
+    return logs.toList();
   }
 }
