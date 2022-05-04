@@ -110,7 +110,7 @@ class _AdminBuildingScreenState extends State<AdminBuildingScreen> {
       body: ListView(
         children: <Widget>[
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.3,
             child: BuildingPieChart(choice: 0),
           ),
         ],
