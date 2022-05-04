@@ -52,20 +52,21 @@ Future<List<Log>> getLogs(int choice) async {
 }
 
 Future<void> buildPieChart(int choice) async {
+  List<String> checkedIds = [];
   List<Log> logs = [];
+  var chartData = new Map<String, int>();
   logs = await getLogs(choice);
-  if (kDebugMode) {
-    print(logs);
-  }
-  int csbCount = 0, ashCount = 0, lanCount = 0;
-
-  for (int i = 0; i < logs.length; i++) {
-    if (logs[i].buildingId == 'CSB') {
-      csbCount++;
-    } else if (logs[i].buildingId == 'ASH') {
-      ashCount++;
-    } else if (logs[i].buildingId == 'LAN') {
-      lanCount++;
+  int len = logs.length;
+  for (int i = 0; i < len; i++) {
+    if (!checkedIds.contains(logs[i].buildingId)) {
+      checkedIds.add(logs[i].buildingId);
+      int count = 0;
+      for (int j = 0; j < len; j++) {
+        if (logs[i].buildingId == logs[j].buildingId) {
+          count++;
+        }
+        chartData[logs[i].buildingId] = count;
+      }
     }
   }
 }
