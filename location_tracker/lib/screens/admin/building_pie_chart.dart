@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location_tracker/models/models.dart';
-import 'package:location_tracker/screens/admin/indicator.dart';
 import 'package:location_tracker/services/firestore.dart';
+import 'package:location_tracker/shared/loading.dart';
 
 class BuildingPieChart extends StatefulWidget {
-  const BuildingPieChart({Key? key, required int choice}) : super(key: key);
+  final int choice;
+  const BuildingPieChart({
+    Key? key,
+    required this.choice,
+  }) : super(key: key);
 
   @override
   State<BuildingPieChart> createState() => BuildingPieChartState();
@@ -16,18 +19,19 @@ class BuildingPieChart extends StatefulWidget {
 
 class BuildingPieChartState extends State<BuildingPieChart> {
   // 0 = Today, 2 = Last Month, 3 = All TIme
-  int choice = 2;
+
   @override
   Widget build(BuildContext context) {
+    int choice = widget.choice;
+
     return FutureBuilder(
         future: buildPieChart(choice),
-        initialData: null,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             List<PieChartSectionData> piChartData = snapshot.data;
             return Column(
               children: [
-                const Text('Activities Logged in Buildings:'),
+                const Text('Activities Logged per building:'),
                 Expanded(
                   child: PieChart(
                     PieChartData(
@@ -42,7 +46,7 @@ class BuildingPieChartState extends State<BuildingPieChart> {
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: LoadingScreen(),
             );
           }
         });
