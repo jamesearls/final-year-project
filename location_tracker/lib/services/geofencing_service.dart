@@ -116,12 +116,14 @@ class GeofencingService {
       }
       currentGeofenceId = geofence.data.toString();
       firestoreService.addUserInBuildings(geofence.id.toString());
+      firestoreService.addLog(geofence.id, true);
     }
     if (geofenceStatus.toString() == "GeofenceStatus.EXIT") {
       if (kDebugMode) {
         print("Yer not in within range of your organisation, that's an L");
       }
       firestoreService.removeUserInBuildings(geofence.id.toString());
+      firestoreService.addLog(geofence.id, false);
     }
     getGeofenceModel(geofenceStatus.toString(), geofence.data.toString());
   }

@@ -28,7 +28,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            FontAwesomeIcons.mapMarkerAlt,
+            FontAwesomeIcons.locationDot,
             size: 20,
           ),
           label: 'Map',

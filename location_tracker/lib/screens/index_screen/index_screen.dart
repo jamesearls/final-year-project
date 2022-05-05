@@ -6,10 +6,13 @@ import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/buildings/buildings.dart';
 import 'package:location_tracker/services/firestore.dart';
 import 'package:location_tracker/services/nfcService.dart';
+import 'package:location_tracker/shared/admin_button.dart';
 import 'package:location_tracker/shared/bottom_nav.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
 import 'package:location_tracker/shared/locationText.dart';
+import 'package:location_tracker/shared/nfc_button.dart';
+import 'package:provider/provider.dart';
 
 import '../../services/geofencing_service.dart';
 
@@ -31,6 +34,7 @@ class _IndexScreenState extends State<IndexScreen> {
 
   @override
   Widget build(BuildContext context) {
+    User userModel = Provider.of<User>(context);
     return FutureBuilder<List<Building>>(
       future: FirestoreService().getAllBuildings(),
       builder: (context, snapshot) {
@@ -59,27 +63,14 @@ class _IndexScreenState extends State<IndexScreen> {
                   ),
                 ),
                 const LocationText(),
-                FloatingActionButton(
-                  onPressed: () {
-                    // Add your onPressed code here!
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Ready to Scan!'),
-                        content: const Text(
-                            'Please move into a room in your and scan the NFC tag.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'Cancel'),
-                            child: const Text('Dismiss'),
-                          ),
-                        ],
-                      ),
-                    );
-                    nfcService.getPayload();
-                  },
-                  backgroundColor: Colors.deepPurple,
-                  child: const Icon(FontAwesomeIcons.nfcSymbol),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    userModel.isAdmin ? const Spacer(flex: 20) : const Spacer(),
+                    const NfcButton(),
+                    const Spacer(),
+                    const AdminButton(),
+                  ],
                 ),
               ],
             ),
