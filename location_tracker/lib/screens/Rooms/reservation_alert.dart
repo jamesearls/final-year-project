@@ -13,7 +13,9 @@ class ReservationAlert extends StatelessWidget {
         actions: [
           TextButton(
             child: const Text('Dismiss'),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
         ]);
   }

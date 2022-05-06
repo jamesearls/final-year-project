@@ -51,6 +51,15 @@ class FirestoreService {
     return desks.toList();
   }
 
+  // Reads all documets from desks collection
+  Future<List<Desk>> getAllDesks() async {
+    var ref = _db.collection('desks');
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var desks = data.map((d) => Desk.fromJson(d));
+    return desks.toList();
+  }
+
   // reserves desk
   Future<void> reserveDesk(Desk desk) async {
     var ref = _db.collection('desks').where('id', isEqualTo: desk.id);
@@ -67,9 +76,21 @@ class FirestoreService {
   }
 
   // occupies desk
-  Future<void> occupyDesk(Desk desk) async {
-    var ref = _db.collection('desks');
-    await ref.doc(desk.id).update({'isOccupied': true});
+  Future<void> occupyDesk(String deskId) async {
+    var ref = _db.collection('desks').where('id', isEqualTo: deskId);
+    var snapshot = await ref.get();
+    var data = snapshot.docs[0].id;
+    var ref2 = _db.collection('desks').doc(data);
+    await ref2.update({'occupied': true});
+  }
+
+  // releases desk
+  Future<void> releaseDesk(String deskId) async {
+    var ref = _db.collection('desks').where('id', isEqualTo: deskId);
+    var snapshot = await ref.get();
+    var data = snapshot.docs[0].id;
+    var ref2 = _db.collection('desks').doc(data);
+    await ref2.update({'occupied': false});
   }
 
   Future<List> getAllUsersInBuildings() async {
@@ -125,10 +146,6 @@ class FirestoreService {
     var users = data.map((d) => User.fromJson(d));
     return users.toList();
   }
-
-  // Listens to number of docs in usersInBuildings collection
-
-  // Listens to number of docs in usersInRooms collection
 
   //user Setup
   Future<void> userSetup() async {
@@ -263,6 +280,20 @@ class FirestoreService {
         await doc.reference.delete();
       }
       removeRoomLog(roomId);
+    }
+  }
+
+  // add or remove user from desk
+  Future<void> addOrRemoveUserFromDesk(String deskId) async {
+    List desks = await FirestoreService().getAllDesks();
+    for (var i = 0; i < desks.length; i++) {
+      if (desks[i].id == deskId) {
+        if (desks[i].occupied == true) {
+          releaseDesk(deskId);
+        } else {
+          occupyDesk(deskId);
+        }
+      }
     }
   }
 

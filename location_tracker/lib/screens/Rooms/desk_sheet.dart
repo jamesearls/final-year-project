@@ -15,10 +15,12 @@ class DeskSheet extends StatefulWidget {
 class _DeskSheetState extends State<DeskSheet> {
   @override
   Widget build(BuildContext context) {
-    List<Desk>? desklist = Provider.of<List<Desk>?>(context);
-    if (desklist == null) {
+    List<Desk>? alldesks = Provider.of<List<Desk>?>(context);
+    if (alldesks == null) {
       return const LoadingScreen();
     } else {
+      List<Desk> desklist =
+          alldesks.where((Desk desk) => desk.roomId == widget.room.id).toList();
       List<Desk> desks = List.from(desklist.reversed);
       return DraggableScrollableSheet(
         builder: (context, scrollController) {

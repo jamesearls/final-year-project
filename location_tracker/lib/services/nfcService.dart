@@ -50,6 +50,18 @@ class NfcService {
         await firestoreService.addOrRemoveUserInRooms(finalResult);
       }
 
+      flag = false;
+
+      List desks = await firestoreService.getAllDesks();
+      for (int i = 0; i < desks.length; i++) {
+        if (finalResult == desks[i].id) {
+          flag = true;
+        }
+      }
+      if (flag == true) {
+        await firestoreService.addOrRemoveUserFromDesk(finalResult);
+      }
+
       NfcManager.instance.stopSession();
     });
   }
