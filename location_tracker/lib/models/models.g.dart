@@ -44,6 +44,20 @@ Map<String, dynamic> _$RoomToJson(Room instance) => <String, dynamic>{
       'desc': instance.desc,
     };
 
+Desk _$DeskFromJson(Map<String, dynamic> json) => Desk(
+      id: json['id'] as String? ?? '',
+      roomId: json['roomId'] as String? ?? '',
+      occupied: json['occupied'] as bool? ?? false,
+      reserved: json['reserved'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$DeskToJson(Desk instance) => <String, dynamic>{
+      'id': instance.id,
+      'roomId': instance.roomId,
+      'occupied': instance.occupied,
+      'reserved': instance.reserved,
+    };
+
 User _$UserFromJson(Map<String, dynamic> json) => User(
       photoUrl: json['photoUrl'] as String? ?? '',
       uid: json['uid'] as String? ?? '',

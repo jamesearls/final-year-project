@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:location_tracker/screens/rooms/desk_list.dart';
 import 'package:location_tracker/services/firestore.dart';
+import 'package:location_tracker/shared/loading.dart';
 import 'package:location_tracker/shared/occupantCount.dart';
 import 'package:location_tracker/shared/progress_bar.dart';
 
@@ -59,30 +61,91 @@ class RoomView extends StatelessWidget {
   }
 }
 
-class RoomScreen extends StatelessWidget {
+class RoomScreen extends StatefulWidget {
   final Room room;
   const RoomScreen({Key? key, required this.room}) : super(key: key);
 
   @override
+  State<RoomScreen> createState() => _RoomScreenState();
+}
+
+class _RoomScreenState extends State<RoomScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(room.name),
-        backgroundColor: Colors.transparent,
-      ),
-      body: ListView(children: [
-        Hero(
-          tag: room.img,
-          child: Image.asset('assets/images/${room.img}',
-              width: MediaQuery.of(context).size.width),
-        ),
-        Text(
-          room.name,
-          style: const TextStyle(
-              height: 2, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        RoomCount(roomId: room.id)
-      ]),
+    return FutureBuilder(
+      future: getDesks(widget.room.id),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          List<Desk> desklist = snapshot.data;
+          List<Desk> desks = List.from(desklist.reversed);
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(widget.room.name),
+              backgroundColor: Colors.deepPurple,
+            ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: ListView(children: [
+                    Hero(
+                      tag: widget.room.img,
+                      child: Image.asset('assets/images/${widget.room.img}',
+                          width: MediaQuery.of(context).size.width),
+                    ),
+                    Text(
+                      widget.room.name,
+                      style: const TextStyle(
+                          height: 2, fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    RoomCount(roomId: widget.room.id)
+                  ]),
+                ),
+                Flexible(
+                  child: DraggableScrollableSheet(
+                    builder: (context, scrollController) {
+                      if (desks.isNotEmpty) {
+                        return Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.deepPurple,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40.0),
+                              topRight: Radius.circular(40.0),
+                            ),
+                          ),
+                          child:
+                              ListView(controller: scrollController, children: [
+                            ListTile(
+                              title: Center(
+                                  child: Text('Desks in ${widget.room.name}:')),
+                            ),
+                            for (Desk desk in desks)
+                              DeskList(
+                                desk: desk,
+                              ),
+                          ]),
+                        );
+                      } else {
+                        return Center(
+                          child: Text('No desks in ${widget.room.name}'),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return const LoadingScreen();
+        }
+      },
     );
   }
+}
+
+Future<List> getDesks(String roomId) async {
+  List desks = await FirestoreService().getDesks(roomId);
+  return desks;
 }

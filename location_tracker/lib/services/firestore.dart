@@ -41,6 +41,16 @@ class FirestoreService {
     return rooms.toList();
   }
 
+  // Reads all documents from rooms collection equal to roomid as list
+  Future<List<Desk>> getDesks(String roomId) async {
+    var ref = _db.collection('desks').where('roomId', isEqualTo: roomId);
+    // .orderBy('deskId', descending: false);
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var desks = data.map((d) => Desk.fromJson(d));
+    return desks.toList();
+  }
+
   Future<List> getAllUsersInBuildings() async {
     var ref = _db.collection('usersInBuildings');
     var snapshot = await ref.get();

@@ -49,6 +49,23 @@ class Room {
 }
 
 @JsonSerializable()
+class Desk {
+  final String id;
+  final String roomId;
+  final bool occupied;
+  final bool reserved;
+
+  Desk({
+    this.id = '',
+    this.roomId = '',
+    this.occupied = false,
+    this.reserved = false,
+  });
+  factory Desk.fromJson(Map<String, dynamic> json) => _$DeskFromJson(json);
+  Map<String, dynamic> toJson() => _$DeskToJson(this);
+}
+
+@JsonSerializable()
 class User {
   final String displayName;
   final String email;
