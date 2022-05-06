@@ -34,6 +34,8 @@ class App extends StatelessWidget {
             create: (_) => FirestoreService().streamUser()),
         StreamProvider<List<Log>?>(
             initialData: null, create: (_) => FirestoreService().streamLogs()),
+        StreamProvider<List<Desk>?>(
+            initialData: null, create: (_) => FirestoreService().streamDesks()),
       ],
       child: MaterialApp(
         routes: appRoutes,

@@ -41,7 +41,7 @@ class FirestoreService {
     return rooms.toList();
   }
 
-  // Reads all documents from rooms collection equal to roomid as list
+  // Reads all documents from desks collection equal to roomid as list
   Future<List<Desk>> getDesks(String roomId) async {
     var ref = _db.collection('desks').where('roomId', isEqualTo: roomId);
     // .orderBy('deskId', descending: false);
@@ -49,6 +49,27 @@ class FirestoreService {
     var data = snapshot.docs.map((s) => s.data());
     var desks = data.map((d) => Desk.fromJson(d));
     return desks.toList();
+  }
+
+  // reserves desk
+  Future<void> reserveDesk(Desk desk) async {
+    var ref = _db.collection('desks').where('id', isEqualTo: desk.id);
+    var snapshot = await ref.get();
+    var data = snapshot.docs[0].id;
+    var ref2 = _db.collection('desks').doc(data);
+
+    final updates = <String, dynamic>{
+      'reserved': true,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+
+    await ref2.update(updates);
+  }
+
+  // occupies desk
+  Future<void> occupyDesk(Desk desk) async {
+    var ref = _db.collection('desks');
+    await ref.doc(desk.id).update({'isOccupied': true});
   }
 
   Future<List> getAllUsersInBuildings() async {
@@ -277,6 +298,12 @@ class FirestoreService {
   Stream<List<Log>> streamLogs() {
     return _db.collection('logs').snapshots().map((snapShot) =>
         snapShot.docs.map((doc) => Log.fromJson(doc.data())).toList());
+  }
+
+  // Streams all documents from desks collection equal to roomid
+  Stream<List<Desk>> streamDesks() {
+    return _db.collection('desks').snapshots().map((snapShot) =>
+        snapShot.docs.map((doc) => Desk.fromJson(doc.data())).toList());
   }
 
   // add building log

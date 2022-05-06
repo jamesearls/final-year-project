@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:location_tracker/models/models.dart';
+import 'package:location_tracker/screens/rooms/reservation_alert.dart';
+import 'package:location_tracker/services/firestore.dart';
 
 class DeskList extends StatelessWidget {
   final Desk desk;
-  const DeskList({Key? key, required this.desk}) : super(key: key);
+  final VoidCallback onReserveSelected;
+
+  const DeskList(
+      {Key? key, required this.desk, required this.onReserveSelected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +40,13 @@ class DeskList extends StatelessWidget {
                   child: const Text('reserve'),
                   onPressed: () {
                     // add reserving functionality
+                    FirestoreService().reserveDesk(desk);
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => ReservationAlert(
+                        deskId: desk.id,
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurpleAccent),
