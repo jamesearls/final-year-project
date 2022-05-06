@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:location_tracker/screens/rooms/desk_list.dart';
+import 'package:location_tracker/screens/rooms/desk_sheet.dart';
 import 'package:location_tracker/services/firestore.dart';
+import 'package:location_tracker/shared/loading.dart';
 import 'package:location_tracker/shared/occupantCount.dart';
 import 'package:location_tracker/shared/progress_bar.dart';
 
@@ -59,30 +62,45 @@ class RoomView extends StatelessWidget {
   }
 }
 
-class RoomScreen extends StatelessWidget {
+class RoomScreen extends StatefulWidget {
   final Room room;
   const RoomScreen({Key? key, required this.room}) : super(key: key);
 
   @override
+  State<RoomScreen> createState() => _RoomScreenState();
+}
+
+class _RoomScreenState extends State<RoomScreen> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(room.name),
-        backgroundColor: Colors.transparent,
+        title: Text(widget.room.name),
+        backgroundColor: Colors.deepPurple,
       ),
-      body: ListView(children: [
-        Hero(
-          tag: room.img,
-          child: Image.asset('assets/images/${room.img}',
-              width: MediaQuery.of(context).size.width),
-        ),
-        Text(
-          room.name,
-          style: const TextStyle(
-              height: 2, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        RoomCount(roomId: room.id)
-      ]),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(
+            child: ListView(children: [
+              Hero(
+                tag: widget.room.img,
+                child: Image.asset('assets/images/${widget.room.img}',
+                    width: MediaQuery.of(context).size.width),
+              ),
+              Text(
+                widget.room.name,
+                style: const TextStyle(
+                    height: 2, fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              RoomCount(roomId: widget.room.id)
+            ]),
+          ),
+          Flexible(
+            child: DeskSheet(room: widget.room),
+          ),
+        ],
+      ),
     );
   }
 }

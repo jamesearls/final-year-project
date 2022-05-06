@@ -41,6 +41,58 @@ class FirestoreService {
     return rooms.toList();
   }
 
+  // Reads all documents from desks collection equal to roomid as list
+  Future<List<Desk>> getDesks(String roomId) async {
+    var ref = _db.collection('desks').where('roomId', isEqualTo: roomId);
+    // .orderBy('deskId', descending: false);
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var desks = data.map((d) => Desk.fromJson(d));
+    return desks.toList();
+  }
+
+  // Reads all documets from desks collection
+  Future<List<Desk>> getAllDesks() async {
+    var ref = _db.collection('desks');
+    var snapshot = await ref.get();
+    var data = snapshot.docs.map((s) => s.data());
+    var desks = data.map((d) => Desk.fromJson(d));
+    return desks.toList();
+  }
+
+  // reserves desk
+  Future<void> reserveDesk(Desk desk) async {
+    var ref = _db.collection('desks').where('id', isEqualTo: desk.id);
+    var snapshot = await ref.get();
+    var data = snapshot.docs[0].id;
+    var ref2 = _db.collection('desks').doc(data);
+
+    final updates = <String, dynamic>{
+      'reserved': true,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+
+    await ref2.update(updates);
+  }
+
+  // occupies desk
+  Future<void> occupyDesk(String deskId) async {
+    var ref = _db.collection('desks').where('id', isEqualTo: deskId);
+    var snapshot = await ref.get();
+    var data = snapshot.docs[0].id;
+    var ref2 = _db.collection('desks').doc(data);
+    await ref2.update({'occupied': true});
+  }
+
+  // releases desk
+  Future<void> releaseDesk(String deskId) async {
+    var ref = _db.collection('desks').where('id', isEqualTo: deskId);
+    var snapshot = await ref.get();
+    var data = snapshot.docs[0].id;
+    var ref2 = _db.collection('desks').doc(data);
+    await ref2.update({'occupied': false});
+  }
+
   Future<List> getAllUsersInBuildings() async {
     var ref = _db.collection('usersInBuildings');
     var snapshot = await ref.get();
@@ -94,10 +146,6 @@ class FirestoreService {
     var users = data.map((d) => User.fromJson(d));
     return users.toList();
   }
-
-  // Listens to number of docs in usersInBuildings collection
-
-  // Listens to number of docs in usersInRooms collection
 
   //user Setup
   Future<void> userSetup() async {
@@ -235,6 +283,20 @@ class FirestoreService {
     }
   }
 
+  // add or remove user from desk
+  Future<void> addOrRemoveUserFromDesk(String deskId) async {
+    List desks = await FirestoreService().getAllDesks();
+    for (var i = 0; i < desks.length; i++) {
+      if (desks[i].id == deskId) {
+        if (desks[i].occupied == true) {
+          releaseDesk(deskId);
+        } else {
+          occupyDesk(deskId);
+        }
+      }
+    }
+  }
+
   // Method to add document to UsersInRooms collection
 
 // Listen to usersInBuildings collection
@@ -267,6 +329,12 @@ class FirestoreService {
   Stream<List<Log>> streamLogs() {
     return _db.collection('logs').snapshots().map((snapShot) =>
         snapShot.docs.map((doc) => Log.fromJson(doc.data())).toList());
+  }
+
+  // Streams all documents from desks collection equal to roomid
+  Stream<List<Desk>> streamDesks() {
+    return _db.collection('desks').snapshots().map((snapShot) =>
+        snapShot.docs.map((doc) => Desk.fromJson(doc.data())).toList());
   }
 
   // add building log
