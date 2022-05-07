@@ -210,25 +210,6 @@ class "location_tracker::screens::admin::room_pie_chart.dart::RoomPieChartState"
 
 "flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::room_pie_chart.dart::RoomPieChartState"
 
-class "location_tracker::screens::admin::sample.dart::PieChartSample2" {
-  +State<StatefulWidget> createState()
-}
-
-"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::sample.dart::PieChartSample2"
-
-class "location_tracker::screens::admin::sample.dart::PieChart2State" {
-  +int touchedIndex
-  +Widget build()
-  +List<PieChartSectionData> showingSections()
-}
-
-"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::sample.dart::PieChart2State"
-
-class "location_tracker::screens::buildings::buildings.dart::BuildingView" {
-  +Building building
-  +Widget build()
-}
-
 "location_tracker::screens::buildings::buildings.dart::BuildingView" o-- "location_tracker::models::models.dart::Building"
 "flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::buildings::buildings.dart::BuildingView"
 
