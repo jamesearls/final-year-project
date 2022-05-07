@@ -1,0 +1,552 @@
+@startuml location_tracker
+left to right direction
+
+set namespaceSeparator ::
+
+class "location_tracker::app.dart::App" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::app.dart::App"
+
+class "location_tracker::models::geofence_model.dart::GeofenceModel" {
+  +String geofenceStatus
+  +String geofenceId
+}
+
+class "location_tracker::models::models.dart::Building" {
+  +String id
+  +String name
+  +double lat
+  +double lng
+  +String img
+  +String desc
+  +int capacity
+  +Map<String, dynamic> toJson()
+}
+
+class "location_tracker::models::models.dart::Room" {
+  +String id
+  +String buildingId
+  +int capacity
+  +String name
+  +String img
+  +String desc
+  +Map<String, dynamic> toJson()
+}
+
+class "location_tracker::models::models.dart::Desk" {
+  +String id
+  +String roomId
+  +bool occupied
+  +bool reserved
+  +Map<String, dynamic> toJson()
+}
+
+class "location_tracker::models::models.dart::User" {
+  +String displayName
+  +String email
+  +bool isAdmin
+  +String photoUrl
+  +String uid
+  +Map<String, dynamic> toJson()
+}
+
+class "location_tracker::models::models.dart::UserInBuilding" {
+  +String buildingId
+  +String userId
+  +Map<String, dynamic> toJson()
+  {static} +dynamic fromSnapshot()
+}
+
+class "location_tracker::models::models.dart::UserInRoom" {
+  +String roomId
+  +String userId
+  +Map<String, dynamic> toJson()
+}
+
+class "location_tracker::models::models.dart::Log" {
+  +String buildingId
+  +bool entry
+  +String userId
+  +String? roomId
+  +dynamic timestamp
+  +Map<String, dynamic> toJson()
+}
+
+class "location_tracker::models::user_location.dart::UserLocation" {
+  +double lat
+  +double lng
+}
+
+class "location_tracker::screens::admin::admin_building_screen.dart::AdminBuildingScreen" { 
+  +State<AdminBuildingScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::admin_building_screen.dart::AdminBuildingScreen"
+
+class "location_tracker::screens::admin::admin_building_screen.dart::_AdminBuildingScreenState" {
+  +List<dynamic> logs
+  +int choice
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::admin_building_screen.dart::_AdminBuildingScreenState"
+
+class "location_tracker::screens::admin::admin_page_view.dart::AdminPageView" {
+  +List<Tab> myTabs
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::admin::admin_page_view.dart::AdminPageView"
+
+class "location_tracker::screens::admin::admin_room_screen.dart::AdminRoomScreen" {
+  +State<AdminRoomScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::admin_room_screen.dart::AdminRoomScreen"
+
+class "location_tracker::screens::admin::admin_room_screen.dart::_AdminRoomScreenState" {   
+  +List<dynamic> logs
+  +int choice
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::admin_room_screen.dart::_AdminRoomScreenState"
+
+class "location_tracker::screens::admin::building_bar_chart.dart::_BarChart" {
+  +int choice
+  -LinearGradient _barsGradient
+  +BarTouchData barTouchData
+  +Widget build()
+  +Widget getTitles()
+}
+
+"location_tracker::screens::admin::building_bar_chart.dart::_BarChart" o-- "flutter::src::painting::gradient.dart::LinearGradient"
+"location_tracker::screens::admin::building_bar_chart.dart::_BarChart" o-- "fl_chart::src::chart::bar_chart::bar_chart_data.dart::BarTouchData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::admin::building_bar_chart.dart::_BarChart"
+
+class "location_tracker::screens::admin::building_bar_chart.dart::BuildingBarChart" {       
+  +int choice
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::building_bar_chart.dart::BuildingBarChart"
+
+class "location_tracker::screens::admin::building_bar_chart.dart::BuildingBarChartState" {  
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::building_bar_chart.dart::BuildingBarChartState"
+
+class "location_tracker::screens::admin::building_pie_chart.dart::BuildingPieChart" {       
+  +int choice
+  +State<BuildingPieChart> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::building_pie_chart.dart::BuildingPieChart"
+
+class "location_tracker::screens::admin::building_pie_chart.dart::BuildingPieChartState" {  
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::building_pie_chart.dart::BuildingPieChartState"
+
+class "location_tracker::screens::admin::indicator.dart::Indicator" {
+  +Color color
+  +String text
+  +bool isSquare
+  +double size
+  +Color textColor
+  +Widget build()
+}
+
+"location_tracker::screens::admin::indicator.dart::Indicator" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::admin::indicator.dart::Indicator"
+
+class "location_tracker::screens::admin::log_list.dart::LogList" {
+  +Log log
+  +Widget build()
+}
+
+"location_tracker::screens::admin::log_list.dart::LogList" o-- "location_tracker::models::models.dart::Log"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::admin::log_list.dart::LogList"
+
+class "location_tracker::screens::admin::room_bar_chart.dart::_BarChart" {
+  +int choice
+  -LinearGradient _barsGradient
+  +BarTouchData barTouchData
+  +Widget build()
+  +Widget getTitles()
+}
+
+"location_tracker::screens::admin::room_bar_chart.dart::_BarChart" o-- "flutter::src::painting::gradient.dart::LinearGradient"
+"location_tracker::screens::admin::room_bar_chart.dart::_BarChart" o-- "fl_chart::src::chart::bar_chart::bar_chart_data.dart::BarTouchData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::admin::room_bar_chart.dart::_BarChart"
+
+class "location_tracker::screens::admin::room_bar_chart.dart::RoomBarChart" {
+  +int choice
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::room_bar_chart.dart::RoomBarChart"
+
+class "location_tracker::screens::admin::room_bar_chart.dart::RoomBarChartState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::room_bar_chart.dart::RoomBarChartState"
+
+class "location_tracker::screens::admin::room_pie_chart.dart::RoomPieChart" {
+  +int choice
+  +State<RoomPieChart> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::room_pie_chart.dart::RoomPieChart"
+
+class "location_tracker::screens::admin::room_pie_chart.dart::RoomPieChartState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::room_pie_chart.dart::RoomPieChartState"
+
+class "location_tracker::screens::admin::sample.dart::PieChartSample2" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::admin::sample.dart::PieChartSample2"
+
+class "location_tracker::screens::admin::sample.dart::PieChart2State" {
+  +int touchedIndex
+  +Widget build()
+  +List<PieChartSectionData> showingSections()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::admin::sample.dart::PieChart2State"
+
+class "location_tracker::screens::buildings::buildings.dart::BuildingView" {
+  +Building building
+  +Widget build()
+}
+
+"location_tracker::screens::buildings::buildings.dart::BuildingView" o-- "location_tracker::models::models.dart::Building"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::buildings::buildings.dart::BuildingView"
+
+class "location_tracker::screens::buildings::buildings.dart::BuildingScreen" {
+  +Building building
+  +Widget build()
+}
+
+"location_tracker::screens::buildings::buildings.dart::BuildingScreen" o-- "location_tracker::models::models.dart::Building"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::buildings::buildings.dart::BuildingScreen"
+
+class "location_tracker::screens::home_screen::home_screen.dart::HomeScreen" {
+  +FirestoreService firestoreService
+  +Widget build()
+}
+
+"location_tracker::screens::home_screen::home_screen.dart::HomeScreen" o-- "location_tracker::services::firestore.dart::FirestoreService"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::home_screen::home_screen.dart::HomeScreen"
+
+class "location_tracker::screens::index_screen::index_screen.dart::IndexScreen" {
+  +State<IndexScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::index_screen::index_screen.dart::IndexScreen"
+
+class "location_tracker::screens::index_screen::index_screen.dart::_IndexScreenState" {     
+  +NfcService nfcService
+  +void initState()
+  +Widget build()
+}
+
+"location_tracker::screens::index_screen::index_screen.dart::_IndexScreenState" o-- "location_tracker::services::nfcService.dart::NfcService"
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::index_screen::index_screen.dart::_IndexScreenState"
+
+class "location_tracker::screens::login_screen::login_screen.dart::LoginScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::login_screen::login_screen.dart::LoginScreen"
+
+class "location_tracker::screens::login_screen::login_screen.dart::LoginButton" {
+  +Color color
+  +IconData icon
+  +String text
+  +Function loginMethod
+  +Widget build()
+}
+
+"location_tracker::screens::login_screen::login_screen.dart::LoginButton" o-- "dart::ui::Color"
+"location_tracker::screens::login_screen::login_screen.dart::LoginButton" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::login_screen::login_screen.dart::LoginButton"
+
+class "location_tracker::screens::map_screen::map_screen.dart::MapScreen" {
+  +_MapScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::map_screen::map_screen.dart::MapScreen"
+
+class "location_tracker::screens::map_screen::map_screen.dart::_MapScreenState" {
+  -Completer<GoogleMapController> _controller
+  -Set<Marker> _markers
+  -Set<Circle> _circles
+  -BitmapDescriptor _markerIcon
+  +void initState()
+  -void _setMarkerIcon()
+  -void _setCircles()
+  -void _onMapCreated()
+  +Widget build()
+  +Future<void> centerScreen()
+}
+
+"location_tracker::screens::map_screen::map_screen.dart::_MapScreenState" o-- "dart::async::Completer<GoogleMapController>"
+"location_tracker::screens::map_screen::map_screen.dart::_MapScreenState" o-- "google_maps_flutter_platform_interface::src::types::bitmap.dart::BitmapDescriptor"
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::map_screen::map_screen.dart::_MapScreenState"
+
+class "location_tracker::screens::profile_screen::profile_screen.dart::ProfileScreen" {     
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::profile_screen::profile_screen.dart::ProfileScreen"
+
+class "location_tracker::screens::rooms::desk_list.dart::DeskList" {
+  +Desk desk
+  +void Function() onReserveSelected
+  +Widget build()
+}
+
+"location_tracker::screens::rooms::desk_list.dart::DeskList" o-- "location_tracker::models::models.dart::Desk"
+"location_tracker::screens::rooms::desk_list.dart::DeskList" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::rooms::desk_list.dart::DeskList"
+
+class "location_tracker::screens::rooms::desk_sheet.dart::DeskSheet" {
+  +Room room
+  +State<DeskSheet> createState()
+}
+
+"location_tracker::screens::rooms::desk_sheet.dart::DeskSheet" o-- "location_tracker::models::models.dart::Room"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::rooms::desk_sheet.dart::DeskSheet"
+
+class "location_tracker::screens::rooms::desk_sheet.dart::_DeskSheetState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::rooms::desk_sheet.dart::_DeskSheetState"
+
+class "location_tracker::screens::rooms::reservation_alert.dart::ReservationAlert" {        
+  +String deskId
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::rooms::reservation_alert.dart::ReservationAlert"
+
+class "location_tracker::screens::rooms::rooms.dart::RoomView" {
+  +Room room
+  +Widget build()
+}
+
+"location_tracker::screens::rooms::rooms.dart::RoomView" o-- "location_tracker::models::models.dart::Room"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::screens::rooms::rooms.dart::RoomView"
+
+class "location_tracker::screens::rooms::rooms.dart::RoomScreen" {
+  +Room room
+  +State<RoomScreen> createState()
+}
+
+"location_tracker::screens::rooms::rooms.dart::RoomScreen" o-- "location_tracker::models::models.dart::Room"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::screens::rooms::rooms.dart::RoomScreen"
+
+class "location_tracker::screens::rooms::rooms.dart::_RoomScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::screens::rooms::rooms.dart::_RoomScreenState"
+
+class "location_tracker::services::auth.dart::AuthService" {
+  +Stream<User?> userStream
+  +User? user
+  +String? getUserName()
+  +String? getUserEmail()
+  +bool getUserVerified()
+  +Future<void> anonLogin()
+  +Future<void> signOut()
+  +Future<void> googleLogin()
+}
+
+"location_tracker::services::auth.dart::AuthService" o-- "dart::async::Stream<User>"        
+"location_tracker::services::auth.dart::AuthService" o-- "firebase_auth::firebase_auth.dart::User"
+
+class "location_tracker::services::firestore.dart::FirestoreService" {
+  -FirebaseFirestore _db
+  +User? user
+  +Future<List<Building>> getAllBuildings()
+  +Future<List<Room>> getAllRooms()
+  +Future<List<Room>> getRooms()
+  +Future<List<Desk>> getDesks()
+  +Future<List<Desk>> getAllDesks()
+  +Future<void> reserveDesk()
+  +Future<void> occupyDesk()
+  +Future<void> releaseDesk()
+  +Future<List<dynamic>> getAllUsersInBuildings()
+  +Future<List<dynamic>> getAllUsersInRooms()
+  +Future<List<UserInBuilding>> getAllUsersInBuildings2()
+  +Future<int> getUsersInBuildings()
+  +Future<String> getUsersInRooms()
+  +Future<List<User>> getAllUsers()
+  +Future<void> userSetup()
+  +Future<Building> getCurrentBuilding()
+  +Future<String> getCurrentBuildingId()
+  +Future<void> addUserInBuildings()
+  +Future<void> removeUserInBuildings()
+  +Future<void> addOrRemoveUserInRooms()
+  +Future<void> addOrRemoveUserFromDesk()
+  +Stream<List<UserInBuilding>> streamUsersInBuildings()
+  +Stream<List<UserInRoom>> streamUsersInRooms()
+  +Stream<User> streamUser()
+  +Stream<List<Log>> streamLogs()
+  +Stream<List<Desk>> streamDesks()
+  +Future<void> addLog()
+  +Future<void> addRoomLog()
+  +Future<void> removeRoomLog()
+  +Future<List<Log>> getTodaysLogs()
+  +Future<List<Log>> getLastMonthsLogs()
+  +Future<List<Log>> getAllTimeLogs()
+}
+
+"location_tracker::services::firestore.dart::FirestoreService" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"location_tracker::services::firestore.dart::FirestoreService" o-- "firebase_auth::firebase_auth.dart::User"
+
+class "location_tracker::services::geofencing_service.dart::GeofencingService" {
+  -GeofenceModel _geofenceModel
+  {static} +String currentGeofenceStatus
+  {static} +String currentGeofenceId
+  +FirestoreService firestoreService
+  -GeofenceService _geofenceService
+  -List<Geofence> _geofenceList
+  -StreamController<GeofenceModel> _geofenceController
+  +Stream<GeofenceModel> geofenceStream
+  +void geofenceCallbacks()
+  -void _onLocationServicesStatusChanged()
+  -void _onError()
+  -Future<void> _onGeofenceStatusChanged()
+  +Future<GeofenceModel> getGeofenceModel()
+  {static} +String getCurrentGeofenceId()
+  {static} +String getCurrentGeofenceStatus()
+}
+
+"location_tracker::services::geofencing_service.dart::GeofencingService" o-- "location_tracker::models::geofence_model.dart::GeofenceModel"
+"location_tracker::services::geofencing_service.dart::GeofencingService" o-- "location_tracker::services::firestore.dart::FirestoreService"
+"location_tracker::services::geofencing_service.dart::GeofencingService" o-- "geofence_service::geofence_service.dart::GeofenceService"
+"location_tracker::services::geofencing_service.dart::GeofencingService" o-- "dart::async::StreamController<GeofenceModel>"
+"location_tracker::services::geofencing_service.dart::GeofencingService" o-- "dart::async::Stream<GeofenceModel>"
+
+class "location_tracker::services::location_service.dart::LocationService" {
+  -UserLocation _currentLocation
+  +Location location
+  -StreamController<UserLocation> _locationController
+  +Stream<UserLocation> locationStream
+  +Future<UserLocation> getLocation()
+}
+
+"location_tracker::services::location_service.dart::LocationService" o-- "location_tracker::models::user_location.dart::UserLocation"
+"location_tracker::services::location_service.dart::LocationService" o-- "location::location.dart::Location"
+"location_tracker::services::location_service.dart::LocationService" o-- "dart::async::StreamController<UserLocation>"
+"location_tracker::services::location_service.dart::LocationService" o-- "dart::async::Stream<UserLocation>"
+
+class "location_tracker::services::nfcService.dart::NfcService" {
+  +FirestoreService firestoreService
+  +ValueNotifier<dynamic> result
+  +void tagReader()
+  +void getPayload()
+}
+
+"location_tracker::services::nfcService.dart::NfcService" o-- "location_tracker::services::firestore.dart::FirestoreService"
+"location_tracker::services::nfcService.dart::NfcService" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<dynamic>"
+
+class "location_tracker::shared::admin_button.dart::AdminButton" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::admin_button.dart::AdminButton"
+
+class "location_tracker::shared::bottom_nav.dart::BottomNavBar" {
+  +FirestoreService firestoreService
+  +Widget build()
+}
+
+"location_tracker::shared::bottom_nav.dart::BottomNavBar" o-- "location_tracker::services::firestore.dart::FirestoreService"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::bottom_nav.dart::BottomNavBar"
+
+class "location_tracker::shared::error.dart::ErrorMessage" {
+  +String message
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::error.dart::ErrorMessage"
+
+class "location_tracker::shared::loading.dart::Loader" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::loading.dart::Loader"
+
+class "location_tracker::shared::loading.dart::LoadingScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::loading.dart::LoadingScreen"
+
+class "location_tracker::shared::locationText.dart::LocationText" {
+  +State<LocationText> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "location_tracker::shared::locationText.dart::LocationText"
+
+class "location_tracker::shared::locationText.dart::_LocationTextState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "location_tracker::shared::locationText.dart::_LocationTextState"
+
+class "location_tracker::shared::nfc_button.dart::NfcButton" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::nfc_button.dart::NfcButton"
+
+class "location_tracker::shared::occupantCount.dart::BuildingCount" {
+  +String buildingId
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::occupantCount.dart::BuildingCount"
+
+class "location_tracker::shared::occupantCount.dart::RoomCount" {
+  +String roomId
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::occupantCount.dart::RoomCount"
+
+class "location_tracker::shared::progress_bar.dart::AnimatedProgressBar" {
+  +double value
+  +double height
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::progress_bar.dart::AnimatedProgressBar"
+
+class "location_tracker::shared::progress_bar.dart::BuildingCapacity" {
+  +Building building
+  +Widget build()
+}
+
+"location_tracker::shared::progress_bar.dart::BuildingCapacity" o-- "location_tracker::models::models.dart::Building"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "location_tracker::shared::progress_bar.dart::BuildingCapacity"
+
+class "location_tracker::shared::progress_bar.dart::RoomCapacity" {
+  {static} +Future<User?> refreshUser()
+}
+
+@enduml
