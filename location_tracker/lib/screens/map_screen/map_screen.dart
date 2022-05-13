@@ -100,8 +100,6 @@ class _MapScreenState extends State<MapScreen> {
     var userLocation = Provider.of<UserLocation?>(context);
     lat = userLocation?.lat ?? 0.0;
     lng = userLocation?.lng ?? 0.0;
-
-    String currentLocationMessage = "You are in the ";
     return Scaffold(
         appBar: AppBar(
           title: const Text('Map'),

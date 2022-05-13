@@ -7,7 +7,7 @@ import 'package:location_tracker/services/firestore.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  FirestoreService firestoreService = FirestoreService();
+  final FirestoreService firestoreService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:location_tracker/services/firestore.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
-  FirestoreService firestoreService = FirestoreService();
+  final FirestoreService firestoreService = FirestoreService();
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(

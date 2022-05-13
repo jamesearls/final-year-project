@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:location_tracker/screens/rooms/desk_sheet.dart';
-import 'package:location_tracker/shared/occupantCount.dart';
+import 'package:location_tracker/shared/occupant_count.dart';
 import 'package:location_tracker/shared/progress_bar.dart';
 
 import '../../models/models.dart';

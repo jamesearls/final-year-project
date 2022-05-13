@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:location_tracker/services/nfcService.dart';
+import 'package:location_tracker/services/nfc_service.dart';
 
 class NfcButton extends StatelessWidget {
   const NfcButton({Key? key}) : super(key: key);

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/admin/room_bar_chart.dart';
 import 'package:location_tracker/screens/admin/room_pie_chart.dart';
-import 'package:provider/provider.dart';
 
 class AdminRoomScreen extends StatefulWidget {
   const AdminRoomScreen({Key? key}) : super(key: key);
@@ -17,7 +15,6 @@ class _AdminRoomScreenState extends State<AdminRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Log>? logStream = Provider.of<List<Log>?>(context);
     final isSelected = <bool>[false, false, false];
     return Scaffold(
       body: ListView(

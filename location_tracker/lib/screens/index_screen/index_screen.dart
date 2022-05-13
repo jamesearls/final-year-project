@@ -1,14 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/buildings/buildings.dart';
 import 'package:location_tracker/services/firestore.dart';
-import 'package:location_tracker/services/nfcService.dart';
+import 'package:location_tracker/services/nfc_service.dart';
 import 'package:location_tracker/shared/admin_button.dart';
 import 'package:location_tracker/shared/bottom_nav.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
-import 'package:location_tracker/shared/locationText.dart';
+import 'package:location_tracker/shared/location_text.dart';
 import 'package:location_tracker/shared/nfc_button.dart';
 import 'package:provider/provider.dart';
 

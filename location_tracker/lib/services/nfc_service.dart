@@ -11,7 +11,9 @@ class NfcService {
   void tagReader() {
     NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
       result.value = tag.data;
-      print(result.value);
+      if (kDebugMode) {
+        print(result.value);
+      }
       NfcManager.instance.stopSession();
     });
   }
