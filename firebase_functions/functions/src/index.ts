@@ -6,7 +6,7 @@ const db = admin.firestore();
 export const CleanAnonUsers = functions
     .region("europe-west2")
     .pubsub
-    .schedule("0 3 * * *")
+    .schedule("0 3 * * *") // run every day at 3:00
     .timeZone("Europe/Belfast")
     .onRun(() => {
       // deletes all the anon users in the Authentication
@@ -44,7 +44,7 @@ export const CleanAnonUsers = functions
 export const cleanUsersInBuildings = functions
     .region("europe-west2")
     .pubsub
-    .schedule("0 3 * * *")
+    .schedule("0 3 * * *") //   run every day at 3:00
     .timeZone("Europe/Belfast")
     .onRun(() => {
       db
@@ -59,7 +59,7 @@ export const cleanUsersInBuildings = functions
 export const cleanUsersInRooms = functions
     .region("europe-west2")
     .pubsub
-    .schedule("0 3 * * *")
+    .schedule("0 3 * * *") // every day at 3am
     .timeZone("Europe/Belfast")
     .onRun(() => {
       db
@@ -70,3 +70,27 @@ export const cleanUsersInRooms = functions
             });
           });
     });
+
+export const cleanReservations = functions
+    .region("europe-west2")
+    .pubsub
+    .schedule("* * * * *") // every minute
+    .timeZone("Europe/Belfast")
+    .onRun(() => {
+      const tsToMillis = admin.firestore.Timestamp.now().toMillis();
+      const compareDate =
+      new Date(tsToMillis - (1 * 60 * 60 * 1000)); // 1 hour ago
+      db.collection("desks")
+          .where("timestamp", "<", compareDate)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              doc.ref.update({
+                timestamp: admin.firestore.FieldValue.delete(),
+                reserved: false,
+              });
+            });
+          }
+          );
+    }
+    );
