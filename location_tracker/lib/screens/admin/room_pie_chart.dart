@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +76,7 @@ Future<List<PieChartSectionData>> buildPieChart(int choice) async {
   int count = 0;
   chartData.forEach((key, value) {
     chartDataList.add(PieChartSectionData(
-        title: key + ": " + value.toString(),
+        title: "$key: $value",
         value: value.toDouble(),
         color: getColour(count),
         showTitle: true,

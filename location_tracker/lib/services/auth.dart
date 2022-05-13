@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:location_tracker/services/firestore.dart';
 
 class AuthService {
   final userStream = FirebaseAuth.instance.authStateChanges();
@@ -25,7 +24,7 @@ class AuthService {
   Future<void> anonLogin() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       //handle error
     }
   }
@@ -48,7 +47,7 @@ class AuthService {
       );
 
       await FirebaseAuth.instance.signInWithCredential(authCredential);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       //handle error
     }
   }

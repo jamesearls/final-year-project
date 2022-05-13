@@ -37,7 +37,6 @@ class DeskList extends StatelessWidget {
               if (currentDesk.occupied == false &&
                   currentDesk.reserved == false) {
                 return ElevatedButton(
-                  child: const Text('reserve'),
                   onPressed: () {
                     // add reserving functionality
                     FirestoreService().reserveDesk(desk);
@@ -50,6 +49,7 @@ class DeskList extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurpleAccent),
+                  child: const Text('reserve'),
                 );
               } else if (currentDesk.occupied == true) {
                 return const Text('Occupied');

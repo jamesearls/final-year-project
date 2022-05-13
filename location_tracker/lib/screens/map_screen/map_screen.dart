@@ -101,7 +101,7 @@ class _MapScreenState extends State<MapScreen> {
     lat = userLocation?.lat ?? 0.0;
     lng = userLocation?.lng ?? 0.0;
 
-    String _currentLocationMessage = "You are in the ";
+    String currentLocationMessage = "You are in the ";
     return Scaffold(
         appBar: AppBar(
           title: const Text('Map'),

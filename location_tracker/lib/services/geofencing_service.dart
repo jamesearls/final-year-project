@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:geofence_service/geofence_service.dart';
 import 'package:location_tracker/models/geofence_model.dart';
 import 'package:location_tracker/services/firestore.dart';
-import 'package:provider/provider.dart';
-
-import '../models/user_location.dart';
 
 class GeofencingService {
   late GeofenceModel _geofenceModel;

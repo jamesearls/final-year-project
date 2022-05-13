@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/services/firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:location_tracker/shared/loading.dart';
 
 class _BarChart extends StatelessWidget {

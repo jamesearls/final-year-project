@@ -1,7 +1,5 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/buildings/buildings.dart';
 import 'package:location_tracker/services/firestore.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:location_tracker/models/geofence_model.dart';
 import 'package:location_tracker/models/user_location.dart';
 import 'package:location_tracker/services/geofencing_service.dart';
 import 'package:provider/provider.dart';

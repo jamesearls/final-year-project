@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/screens/admin/room_bar_chart.dart';
 import 'package:location_tracker/screens/admin/room_pie_chart.dart';
-import 'package:location_tracker/screens/admin/log_list.dart';
-import 'package:location_tracker/services/firestore.dart';
 import 'package:provider/provider.dart';
 
 class AdminRoomScreen extends StatefulWidget {

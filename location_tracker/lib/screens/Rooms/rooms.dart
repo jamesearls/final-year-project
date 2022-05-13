@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:location_tracker/screens/rooms/desk_list.dart';
 import 'package:location_tracker/screens/rooms/desk_sheet.dart';
-import 'package:location_tracker/services/firestore.dart';
-import 'package:location_tracker/shared/loading.dart';
 import 'package:location_tracker/shared/occupantCount.dart';
 import 'package:location_tracker/shared/progress_bar.dart';
 

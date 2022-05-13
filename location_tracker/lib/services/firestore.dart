@@ -115,7 +115,6 @@ class FirestoreService {
     var data = snapshot.docs.map((s) => s.data());
     var usersInBuildings = data.map((d) => UserInBuilding.fromJson(d));
     return usersInBuildings.toList();
-    ;
   }
 
   // Method to return number of documents UsersinBuilding with buildingId
