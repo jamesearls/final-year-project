@@ -54,16 +54,18 @@ dependencies:
 
   # State Management
   provider: ^6.0.1
+  rxdart: ^0.27.3
 
   #Location Services
   geolocator: ^8.0.35
-  geocoding: ^2.0.2
   google_maps_flutter: ^2.1.1
-  fluttertoast: ^8.0.8
   location: ^4.3.0
   geofence_service: ^3.4.8
-  rxdart: ^0.27.3
+
+  # NFC Management
   nfc_manager: ^3.1.1
+
+  # Reporting
   fl_chart: ^0.50.1
 
 dev_dependencies:
