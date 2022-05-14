@@ -113,6 +113,7 @@ class Log {
   final bool entry;
   final String userId;
   final String? roomId;
+  // ignore: prefer_typing_uninitialized_variables
   var timestamp;
   Log(
       {this.timestamp = 0,
