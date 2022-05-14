@@ -53,6 +53,7 @@ class GeofencingService {
       ],
     ),
   ];
+
   // Geofencing initstate
   void geofenceCallbacks() {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -109,7 +110,7 @@ class GeofencingService {
 
     if (geofenceStatus.toString() == "GeofenceStatus.ENTER") {
       if (kDebugMode) {
-        print("Yer in ${geofence.data} now bai");
+        print("You are in ${geofence.data}");
       }
       currentGeofenceId = geofence.data.toString();
       firestoreService.addUserInBuildings(geofence.id.toString());
@@ -117,7 +118,7 @@ class GeofencingService {
     }
     if (geofenceStatus.toString() == "GeofenceStatus.EXIT") {
       if (kDebugMode) {
-        print("Yer not in within range of your organisation, that's an L");
+        print("You are not within range of your organisation, that's an L");
       }
       firestoreService.removeUserInBuildings(geofence.id.toString());
       firestoreService.addLog(geofence.id, false);
