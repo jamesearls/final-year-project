@@ -94,7 +94,17 @@ class BuildingScreen extends StatelessWidget {
                         rooms.map((room) => RoomView(room: room)).toList(),
                   ),
                 ),
-                BuildingCount(buildingId: building.id),
+                Container(
+                    padding: const EdgeInsets.all(15),
+                    child: Text(building.desc)),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  color: Colors.deepPurple,
+                  child: Column(children: [
+                    const Text('Total Occupants:'),
+                    BuildingCapacity(building: building),
+                  ]),
+                )
               ],
             ),
           );

@@ -85,14 +85,18 @@ class _RoomScreenState extends State<RoomScreen> {
                 child: Image.asset('assets/images/${widget.room.img}',
                     width: MediaQuery.of(context).size.width),
               ),
-              Text(
-                widget.room.name,
-                style: const TextStyle(
-                    height: 2, fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              RoomCount(roomId: widget.room.id)
+              Container(
+                padding: const EdgeInsets.all(10),
+                color: Colors.deepPurple,
+                child: Column(children: [
+                  const Text('Total Occupants:'),
+                  RoomCapacity(room: widget.room),
+                ]),
+              )
             ]),
           ),
+          Container(
+              padding: const EdgeInsets.all(15), child: Text(widget.room.desc)),
           Flexible(
             child: DeskSheet(room: widget.room),
           ),
