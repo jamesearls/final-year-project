@@ -67,6 +67,8 @@ dependencies:
 
   # Reporting
   fl_chart: ^0.50.1
+  test: ^1.19.5
+  mockito: ^5.2.0
 
 dev_dependencies:
   flutter_test:
