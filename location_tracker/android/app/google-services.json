@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "862234343810-qq2lconfvoanvoh7s745kk8mqng4lqej.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.location_tracker",
+            "certificate_hash": "97ee1b798c4910eac2d05783d5fe95365826d68e"
+          }
+        },
+        {
           "client_id": "862234343810-21v704520kl5b2v16p1p1nd9k7ep0ohu.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "862234343810-21v704520kl5b2v16p1p1nd9k7ep0ohu.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "862234343810-4e3sagfj1fqdq5h0103k5mocvomb0e88.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "location-tracker-signin"
+              }
             }
           ]
         }
