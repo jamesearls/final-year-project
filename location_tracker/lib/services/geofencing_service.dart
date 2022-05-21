@@ -59,12 +59,10 @@ class GeofencingService {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       _geofenceService
           .addGeofenceStatusChangeListener(_onGeofenceStatusChanged);
-      // _geofenceService.addLocationChangeListener(_onLocationChanged);
       _geofenceService.addLocationServicesStatusChangeListener(
           _onLocationServicesStatusChanged);
       _geofenceService.addStreamErrorListener(_onError);
       _geofenceService.start(_geofenceList).catchError(_onError);
-
       _geofenceController.add(
         GeofenceModel(
           geofenceStatus: currentGeofenceStatus,
@@ -146,5 +144,9 @@ class GeofencingService {
 
   static String getCurrentGeofenceStatus() {
     return currentGeofenceStatus;
+  }
+
+  void dispose() {
+    _geofenceService.stop();
   }
 }

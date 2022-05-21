@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:location_tracker/services/firestore.dart';
-import 'package:location_tracker/shared/occupant_count.dart';
 import 'package:location_tracker/shared/error.dart';
 import 'package:location_tracker/shared/loading.dart';
 import 'package:location_tracker/shared/progress_bar.dart';
@@ -15,7 +14,7 @@ class BuildingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: building.img,
+      tag: building.id,
       child: Card(
         clipBehavior: Clip.antiAlias,
         child: InkWell(

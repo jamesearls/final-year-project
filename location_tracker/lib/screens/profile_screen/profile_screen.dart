@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geofence_service/geofence_service.dart';
 import 'package:location_tracker/models/models.dart';
 import 'package:location_tracker/services/auth.dart';
+import 'package:location_tracker/services/geofencing_service.dart';
 import 'package:location_tracker/shared/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +46,8 @@ class ProfileScreen extends StatelessWidget {
               ElevatedButton(
                 child: const Text('logout'),
                 onPressed: () async {
+                  GeofencingService gc = GeofencingService();
+                  gc.dispose();
                   await AuthService().signOut();
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil('/', (route) => false);

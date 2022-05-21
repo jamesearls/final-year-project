@@ -23,7 +23,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    GeofencingService().geofenceCallbacks();
+    // GeofencingService().geofenceCallbacks();
     _setMarkerIcon();
     _setCircles();
   }

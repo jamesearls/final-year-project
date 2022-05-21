@@ -45,20 +45,3 @@ class App extends StatelessWidget {
     );
   }
 }
-
-// @override
-//   Widget build(BuildContext context) {
-//     return MultiProvider(
-//       providers: [
-//         StreamProvider<UserLocation?>(
-//           create: (context) => LocationService().locationStream,
-//           initialData: null,
-//         ),
-//       ],
-//       child: MaterialApp(
-//         routes: appRoutes,
-//         title: 'James Location Tracker',
-//         theme: appTheme,
-//       ),
-//     );
-//   }

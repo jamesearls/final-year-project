@@ -38,7 +38,7 @@ class _AdminBuildingScreenState extends State<AdminBuildingScreen> {
                     const Text('Logs '),
                     Text(
                       '${logs.length} logs loaded',
-                      style: const TextStyle(fontSize: 10, color: Colors.grey),
+                      style: const TextStyle(fontSize: 9, color: Colors.grey),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

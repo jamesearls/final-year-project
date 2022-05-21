@@ -12,7 +12,7 @@ class RoomView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: room.img,
+      tag: room.id,
       child: Card(
         clipBehavior: Clip.antiAlias,
         child: InkWell(
